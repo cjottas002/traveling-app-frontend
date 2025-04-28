@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beach_vacation">Beach vacation</string>
+    <string name="upcoming_meetups">Upcoming meetups</string>
+    <string name="eurodisney">Eurodisney</string>
+    <string name="rent_a_car">Rent a car</string>
+    <string name="usa_los_angeles">USA, Los Angeles – 2 Weeks</string>
+    <string name="city_of_los_angeles">City of Los Angeles</string>
+    <string name="maldives_3_weeks">Maldives – 3 Weeks</string>
+</resources>

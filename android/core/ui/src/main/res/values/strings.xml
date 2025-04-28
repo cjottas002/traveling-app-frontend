@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TravelingApp</string>
+    <string name="next">Next</string>
+    <string name="login">Log in</string>
+    <string name="skip">Skip</string>
+</resources>

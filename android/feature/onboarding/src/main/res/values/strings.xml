@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding1_title">Your travel app</string>
+    <string name="onboarding1_main_text">
+        Hello, we\'re looking for millions of users with a passion for travel.
+        If that\'s you, don\'t hesitate: open our app and discover thousands of
+        destinations and tools to rent cars, check the weather…
+    </string>
+    <string name="onboarding2_title">Find Your Match!</string>
+    <string name="onboarding2_main_text">We\'ve helped millions across the nation find their perfect match… and you\'re next!</string>
+    <string name="onboarding3_title">Find the Perfect Roommate</string>
+    <string name="onboarding3_main_text">We\'ve helped millions across the nation find their perfect match… and you\'re next!</string>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TravelingApp</string>
+    <string name="onboarding1_title">Your travel app</string>
+    <string name="onboarding1_main_text">
+        Hello, we’re looking for millions of users with a passion for travel.
+        If that’s you, don’t hesitate: open our app and discover thousands of
+        destinations and tools to rent cars, check the weather…
+    </string>
+    <string name="next">Next</string>
+    <string name="beach_vacation">Beach vacation</string>
+    <string name="upcoming_meetups">Upcoming meetups</string>
+    <string name="title_activity_login">Login Activity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">Welcome!</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be more than 5 characters</string>
+    <string name="login_failed">Login failed</string>
+    <string name="forgot_password">Forgot password? <b>Get new</b></string>
+    <string name="create_account_text">Do you have an account? <b>Create new</b></string>
+    <string name="privacy_policy">Privacy Policy View terms</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="eurodisney">Eurodisney</string>
+    <string name="rent_a_car">Rent a car</string>
+    <string name="usa_los_angeles">USA, Los Angeles – 2 Weeks</string>
+    <string name="city_of_los_angeles">City of Los Angeles</string>
+    <string name="maldives_3_weeks">Maldives – 3 Weeks</string>
+    <string name="age">How old are you?</string>
+    <string name="register_text">Register</string>
+    <string name="sign_me_up">Sign me up</string>
+    <string name="whats_your_lastname">What’s your last name?</string>
+    <string name="whats_your_name">What’s your name?</string>
+    <string name="onboarding2_title">Find Your Match!</string>
+    <string name="onboarding2_main_text">We\'ve helped millions across the nation find their perfect match… and you’re next!</string>
+    <string name="skip">Skip</string>
+    <string name="onboarding3_title">Find the Perfect Roommate</string>
+    <string name="onboarding3_main_text">We\'ve helped millions across the nation find their perfect match… and you’re next!</string>
+    <string name="itd_available_soon">This feature will be implemented soon</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="login_error_empty_fields">You must complete both name and password</string>
+    <string name="login_offline_not_available">No internet connection. Offline login is not available yet.</string>
+    <string name="register_error_empty_fields">You must complete both name and last name</string>
+    <string name="register_error_not_adult">You must be an adult</string>
+    <string name="register_error_invalid_name">Name contains invalid characters</string>
+    <string name="register_error_invalid_lastname">Last name contains invalid characters</string>
+</resources>

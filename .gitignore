@@ -1,0 +1,73 @@
+# === OS ===
+.DS_Store
+.gradle-user/
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# === IDE / Android Studio / IntelliJ ===
+.idea/
+*.iml
+*.ipr
+*.iws
+.navigation/
+captures/
+
+# === Build outputs ===
+**/build/
+!**/build-logic/
+.externalNativeBuild/
+.cxx/
+
+# === APK / AAB / Bundles ===
+*.apk
+*.ap_
+*.aab
+
+# === Java / Kotlin compiled ===
+*.class
+*.dex
+*.kotlin_module
+
+# === Native ===
+*.so
+*.o
+*.obj
+
+# === Gradle caches (NOT the wrapper) ===
+.gradle/
+!gradle/wrapper/
+!gradlew
+!gradlew.bat
+
+# === Signing ===
+*.jks
+*.keystore
+signing.properties
+
+# === Secrets / Environment ===
+.env
+.env.*
+local.properties
+google-services.json
+secrets.properties
+
+# === Logs / Temp ===
+*.log
+*.tmp
+*.temp
+*.orig
+*.rej
+*.hprof
+
+# === Test outputs ===
+**/test-results/
+**/outputs/
+
+# === ProGuard output (not rules) ===
+proguard/
+
+# === Claude Code ===
+CLAUDE.md
+AGENTS.md

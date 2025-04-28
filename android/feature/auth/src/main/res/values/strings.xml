@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Log in</string>
+    <string name="login_failed">Login failed</string>
+    <string name="login_offline_not_available">No internet connection. Offline login is not available yet.</string>
+    <string name="forgot_password">Forgot password? <b>Get new</b></string>
+    <string name="create_account_text">Do you have an account? <b>Create new</b></string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="itd_available_soon">This feature will be implemented soon</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="age">How old are you?</string>
+    <string name="register_text">Register</string>
+    <string name="sign_me_up">Sign me up</string>
+    <string name="whats_your_lastname">What\'s your last name?</string>
+    <string name="whats_your_name">What\'s your name?</string>
+    <string name="privacy_policy">Privacy Policy View terms</string>
+    <string name="register_error_empty_fields">You must complete both name and last name</string>
+    <string name="register_error_not_adult">You must be an adult</string>
+    <string name="register_error_invalid_name">Name contains invalid characters</string>
+    <string name="register_error_invalid_lastname">Last name contains invalid characters</string>
+</resources>

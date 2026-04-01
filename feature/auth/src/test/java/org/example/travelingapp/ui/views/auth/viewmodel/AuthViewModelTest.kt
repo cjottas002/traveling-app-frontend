@@ -14,7 +14,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.example.travelingapp.core.datastore.TokenManager
 import org.example.travelingapp.core.network.NetworkExecutor
-import org.example.travelingapp.core.response.ValidationError
 import org.example.travelingapp.core.response.login.LoginResponse
 import org.example.travelingapp.core.response.login.dtos.LoginDto
 import org.example.travelingapp.core.response.register.RegisterResponse
@@ -77,6 +76,12 @@ class AuthViewModelTest {
     }
 
     @Test
+    fun `onConfirmPasswordChanged updates confirmPassword`() {
+        viewModel.onConfirmPasswordChanged("mypass")
+        assertEquals("mypass", viewModel.confirmPassword.value)
+    }
+
+    @Test
     fun `isLoginEnabled is true when both fields are not blank`() {
         viewModel.onUsernameChanged("user")
         viewModel.onPasswordChanged("pass")
@@ -98,19 +103,53 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `isRegisterEnabled is false when not adult`() {
+    fun `isRegisterEnabled is false when terms not accepted`() {
         viewModel.onUsernameChanged("user")
-        viewModel.onPasswordChanged("pass")
-        viewModel.setIsAdult(false)
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Pass123!")
+        viewModel.onTermsChanged(false)
+        assertFalse(viewModel.isRegisterEnabled.value)
+    }
+
+    @Test
+    fun `isRegisterEnabled is false when passwords dont match`() {
+        viewModel.onUsernameChanged("user")
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("different")
+        viewModel.onTermsChanged(true)
+        assertFalse(viewModel.isRegisterEnabled.value)
+    }
+
+    @Test
+    fun `isRegisterEnabled is false when password too short`() {
+        viewModel.onUsernameChanged("user")
+        viewModel.onPasswordChanged("12345")
+        viewModel.onConfirmPasswordChanged("12345")
+        viewModel.onTermsChanged(true)
         assertFalse(viewModel.isRegisterEnabled.value)
     }
 
     @Test
     fun `isRegisterEnabled is true when all conditions met`() {
         viewModel.onUsernameChanged("user")
-        viewModel.onPasswordChanged("pass")
-        viewModel.setIsAdult(true)
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Pass123!")
+        viewModel.onTermsChanged(true)
         assertTrue(viewModel.isRegisterEnabled.value)
+    }
+
+    @Test
+    fun `passwordsMatch is true when passwords are equal`() {
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Pass123!")
+        assertTrue(viewModel.passwordsMatch.value)
+    }
+
+    @Test
+    fun `passwordsMatch is false when passwords differ`() {
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Other456!")
+        assertFalse(viewModel.passwordsMatch.value)
     }
 
     @Test
@@ -175,10 +214,10 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `register calls onError when not adult`() {
+    fun `register calls onError when passwords dont match`() {
         viewModel.onUsernameChanged("user")
-        viewModel.onPasswordChanged("pass")
-        viewModel.setIsAdult(false)
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Different!")
 
         var errorCalled = false
         viewModel.register(
@@ -193,7 +232,8 @@ class AuthViewModelTest {
     fun `register success calls onSuccess`() = runTest {
         viewModel.onUsernameChanged("newuser")
         viewModel.onPasswordChanged("Pass123!")
-        viewModel.setIsAdult(true)
+        viewModel.onConfirmPasswordChanged("Pass123!")
+        viewModel.onTermsChanged(true)
 
         val response = RegisterResponse().apply {
             data = RegisterDto(isRegistered = true)
@@ -212,8 +252,9 @@ class AuthViewModelTest {
     @Test
     fun `register failure calls onError with message`() = runTest {
         viewModel.onUsernameChanged("user")
-        viewModel.onPasswordChanged("pass")
-        viewModel.setIsAdult(true)
+        viewModel.onPasswordChanged("Pass123!")
+        viewModel.onConfirmPasswordChanged("Pass123!")
+        viewModel.onTermsChanged(true)
 
         val response = RegisterResponse().apply {
             data = RegisterDto(isRegistered = false)

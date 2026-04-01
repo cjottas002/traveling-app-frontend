@@ -21,9 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.example.travelingapp.domain.entities.Transport
+import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
@@ -36,11 +37,23 @@ fun TransportTab(transportViewModel: TransportViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = Dimens.spacingMd)
     ) {
+        item {
+            VerticalSpacer(Dimens.spacingMd)
+            AppText(
+                text = stringResource(R.string.tab_transport),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            VerticalSpacer(Dimens.spacingLg)
+        }
+
         items(transports) { transport ->
             TransportItem(transport = transport) {
-                Toast.makeText(context, "Selected: ${transport.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, transport.name, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -51,30 +64,40 @@ fun TransportItem(transport: Transport, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Dimens.spacingSm)
+            .padding(bottom = Dimens.spacingSm)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp),
+        shape = RoundedCornerShape(Dimens.radiusLg),
+        elevation = CardDefaults.cardElevation(Dimens.elevationSm),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Row(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(Dimens.spacingMd)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f).padding(start = Dimens.spacingLg)) {
-                AppText(text = transport.name, style = MaterialTheme.typography.titleLarge)
-                VerticalSpacer(Dimens.spacingMd)
-                AppText(text = transport.price, style = MaterialTheme.typography.bodyMedium)
+            Column(modifier = Modifier.weight(1f)) {
+                AppText(
+                    text = transport.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                VerticalSpacer(Dimens.spacingXs)
+                AppText(
+                    text = transport.price,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
             AppImage(
                 resId = transport.imageRes,
                 contentDescription = null,
                 modifier = Modifier
-                    .height(90.dp)
-                    .padding(start = 8.dp)
+                    .height(Dimens.avatarMd)
+                    .padding(start = Dimens.spacingSm)
             )
         }
     }

@@ -20,29 +20,40 @@ import androidx.compose.ui.unit.dp
 import org.example.travelingapp.ui.theme.Dimens
 
 @Composable
-fun PagerIndicator(size: Int, currentPage: Int, modifier: Modifier = Modifier) {
+fun PagerIndicator(
+    size: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier,
+    activeColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
+    inactiveColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.outlineVariant
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
         modifier = modifier
     ) {
         repeat(size) {
-            Indicator(isSelected = it == currentPage)
+            Indicator(
+                isSelected = it == currentPage,
+                activeColor = activeColor,
+                inactiveColor = inactiveColor
+            )
         }
     }
 }
 
 @Composable
-private fun Indicator(isSelected: Boolean) {
+private fun Indicator(
+    isSelected: Boolean,
+    activeColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
+    inactiveColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.outlineVariant
+) {
     val width by animateDpAsState(
         targetValue = if (isSelected) 28.dp else 10.dp,
         animationSpec = tween(300),
         label = "indicator_width"
     )
     val color by animateColorAsState(
-        targetValue = if (isSelected)
-            MaterialTheme.colorScheme.primary
-        else
-            MaterialTheme.colorScheme.outlineVariant,
+        targetValue = if (isSelected) activeColor else inactiveColor,
         animationSpec = tween(300),
         label = "indicator_color"
     )

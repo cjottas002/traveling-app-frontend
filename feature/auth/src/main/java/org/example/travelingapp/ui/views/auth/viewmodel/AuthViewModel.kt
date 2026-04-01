@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.example.travelingapp.feature.auth.R
 import org.example.travelingapp.core.datastore.TokenManager
@@ -30,8 +29,6 @@ class AuthViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private val invalidCharacters = emptyArray<Char>()
-
     private val _username = MutableStateFlow("admin")
     val username: StateFlow<String> = _username.asStateFlow()
 
@@ -39,25 +36,24 @@ class AuthViewModel @Inject constructor(
     val password: StateFlow<String> = _password.asStateFlow()
 
 
-    private val _isAdult = MutableStateFlow(false)
-    val isAdult: StateFlow<Boolean> = _isAdult.asStateFlow()
+    private val _confirmPassword = MutableStateFlow("")
+    val confirmPassword: StateFlow<String> = _confirmPassword.asStateFlow()
 
-    val isNameValid: StateFlow<Boolean> = _username
-        .map { input -> invalidCharacters.none { it in input } }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
-    val isLastNameValid: StateFlow<Boolean> = _password
-        .map { input -> invalidCharacters.none { it in input } }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    private val _acceptedTerms = MutableStateFlow(false)
+    val acceptedTerms: StateFlow<Boolean> = _acceptedTerms.asStateFlow()
 
     val isLoginEnabled: StateFlow<Boolean> = combine(_username, _password) { user, pass ->
         user.isNotBlank() && pass.isNotBlank()
     }.stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
+    val passwordsMatch: StateFlow<Boolean> = combine(_password, _confirmPassword) { pass, confirm ->
+        pass.isNotBlank() && pass == confirm
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     val isRegisterEnabled: StateFlow<Boolean> = combine(
-        _username, _password, _isAdult, isNameValid, isLastNameValid
-    ) { username, password, adult, nameValid, lastValid ->
-        username.isNotBlank() && password.isNotBlank() && adult && nameValid && lastValid
+        _username, _password, _confirmPassword, _acceptedTerms
+    ) { username, password, confirm, terms ->
+        username.isNotBlank() && password.length >= 6 && password == confirm && terms
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     fun onUsernameChanged(newUsername: String) {
@@ -68,8 +64,12 @@ class AuthViewModel @Inject constructor(
         _password.value = newPassword
     }
 
-    fun setIsAdult(adult: Boolean) {
-        _isAdult.value = adult
+    fun onConfirmPasswordChanged(value: String) {
+        _confirmPassword.value = value
+    }
+
+    fun onTermsChanged(accepted: Boolean) {
+        _acceptedTerms.value = accepted
     }
 
     fun login(onSuccess: (token: String) -> Unit, onError: (String) -> Unit) {
@@ -150,16 +150,8 @@ class AuthViewModel @Inject constructor(
             onError(context.getString(R.string.register_error_empty_fields))
             return
         }
-        if (!_isAdult.value) {
-            onError(context.getString(R.string.register_error_not_adult))
-            return
-        }
-        if (!isNameValid.value) {
-            onError(context.getString(R.string.register_error_invalid_name))
-            return
-        }
-        if (!isLastNameValid.value) {
-            onError(context.getString(R.string.register_error_invalid_lastname))
+        if (_password.value != _confirmPassword.value) {
+            onError(context.getString(R.string.register_error_passwords_dont_match))
             return
         }
         viewModelScope.launch {

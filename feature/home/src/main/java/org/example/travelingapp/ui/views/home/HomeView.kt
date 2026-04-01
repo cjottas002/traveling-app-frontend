@@ -1,8 +1,7 @@
 package org.example.travelingapp.ui.views.home
 
-import android.content.Intent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -20,19 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.example.travelingapp.feature.home.R
-import org.example.travelingapp.ui.views.components.AppIconButton
-import org.example.travelingapp.ui.views.components.AppToolBar
 
 @Composable
 fun HomeView(navController: NavController, onNavigateToRentCar: () -> Unit) {
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     val tabs = listOf(
         Icons.Filled.Explore to R.string.tab_explore,
@@ -47,32 +41,11 @@ fun HomeView(navController: NavController, onNavigateToRentCar: () -> Unit) {
     )
 
     Scaffold(
-        topBar = {
-            AppToolBar(showBack = true, navController = navController) {
-                AppIconButton(
-                    iconRes = R.drawable.common_ic_castle,
-                    contentDescription = stringResource(R.string.eurodisney),
-                    iconSize = org.example.travelingapp.ui.theme.Dimens.iconLg,
-                    iconTint = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    val intent = Intent(Intent.ACTION_VIEW, "https://www.disneylandparis.com/".toUri())
-                    context.startActivity(intent)
-                }
-
-                AppIconButton(
-                    iconRes = R.drawable.common_ic_car,
-                    contentDescription = stringResource(R.string.rent_a_car),
-                    iconSize = org.example.travelingapp.ui.theme.Dimens.iconLg,
-                    iconTint = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    onNavigateToRentCar()
-                }
-            }
-        },
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
+                tonalElevation = org.example.travelingapp.ui.theme.Dimens.elevationSm
             ) {
                 tabs.forEachIndexed { index, (icon, labelRes) ->
                     NavigationBarItem(
@@ -106,7 +79,9 @@ fun HomeView(navController: NavController, onNavigateToRentCar: () -> Unit) {
     ) { innerPadding ->
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .statusBarsPadding()
         ) { page ->
             when (page) {
                 0 -> HomeTab()

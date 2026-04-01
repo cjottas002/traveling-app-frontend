@@ -41,14 +41,21 @@ fun HomeTab(viewModel: DestinationViewModel = hiltViewModel()) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Dimens.spacingMd)
+            .padding(horizontal = Dimens.spacingMd)
     ) {
         item {
+            VerticalSpacer(Dimens.spacingMd)
+            AppText(
+                text = "\uD83C\uDF0D",
+                style = MaterialTheme.typography.headlineLarge
+            )
+            VerticalSpacer(Dimens.spacingXs)
             AppText(
                 textRes = R.string.upcoming_meetups,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = Dimens.spacingSm)
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
             )
+            VerticalSpacer(Dimens.spacingLg)
         }
 
         if (isLoading && destinations.isEmpty()) {
@@ -86,17 +93,16 @@ fun DestinationCard(destination: Destination) {
             .fillMaxWidth()
             .padding(bottom = Dimens.spacingMd),
         shape = RoundedCornerShape(Dimens.radiusLg),
-        elevation = CardDefaults.cardElevation(Dimens.elevationMd),
+        elevation = CardDefaults.cardElevation(Dimens.elevationSm),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(modifier = Modifier.padding(Dimens.spacingMd)) {
+        Column {
             if (destination.imageUrl.isNotBlank()) {
                 val imageModifier = Modifier
                     .fillMaxWidth()
                     .height(Dimens.cardImageHeight)
-                    .clip(RoundedCornerShape(Dimens.radiusMd))
 
                 if (destination.imageUrl.startsWith("local:")) {
                     val resName = destination.imageUrl.removePrefix("local:")
@@ -118,30 +124,31 @@ fun DestinationCard(destination: Destination) {
                         contentScale = ContentScale.Crop
                     )
                 }
-                VerticalSpacer(Dimens.spacingSm)
             }
 
-            AppText(
-                text = destination.name,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            VerticalSpacer(Dimens.spacingXs)
-
-            AppText(
-                text = "${destination.country} · ${destination.category}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            if (destination.description.isNotBlank()) {
-                VerticalSpacer(Dimens.spacingXs)
+            Column(modifier = Modifier.padding(Dimens.spacingMd)) {
                 AppText(
-                    text = destination.description,
+                    text = destination.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                VerticalSpacer(Dimens.spacingXs)
+
+                AppText(
+                    text = "${destination.country} · ${destination.category}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                if (destination.description.isNotBlank()) {
+                    VerticalSpacer(Dimens.spacingXs)
+                    AppText(
+                        text = destination.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

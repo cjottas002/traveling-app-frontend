@@ -13,7 +13,7 @@ import org.example.travelingapp.data.local.entities.TransportEntity
 import org.example.travelingapp.data.mapper.toEntities
 import org.example.travelingapp.data.repository.TransportRepository
 import org.example.travelingapp.data.repository.UserRepository
-import org.example.travelingapp.domain.services.IUserService
+import org.example.travelingapp.data.remote.services.IUserService
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -100,9 +100,8 @@ class RepositoryIntegrationTest {
                     data = listOf(
                         UserDto(
                             id = "user-1",
-                            name = "John",
+                            username = "John",
                             email = "john@mail.com",
-                            password = "123",
                             updatedAt = 12L
                         )
                     )

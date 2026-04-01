@@ -1,5 +1,8 @@
 package org.example.travelingapp.ui.views.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,32 +11,47 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.example.travelingapp.ui.theme.Dimens
 
 @Composable
 fun PagerIndicator(size: Int, currentPage: Int, modifier: Modifier = Modifier) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
         modifier = modifier
     ) {
         repeat(size) {
-            Indicator(isSelect = it == currentPage)
+            Indicator(isSelected = it == currentPage)
         }
     }
 }
 
 @Composable
-fun Indicator(isSelect: Boolean) {
+private fun Indicator(isSelected: Boolean) {
+    val width by animateDpAsState(
+        targetValue = if (isSelected) 28.dp else 10.dp,
+        animationSpec = tween(300),
+        label = "indicator_width"
+    )
+    val color by animateColorAsState(
+        targetValue = if (isSelected)
+            MaterialTheme.colorScheme.primary
+        else
+            MaterialTheme.colorScheme.outlineVariant,
+        animationSpec = tween(300),
+        label = "indicator_color"
+    )
+
     Box(
         modifier = Modifier
-            .padding(5.dp)
             .height(10.dp)
-            .width(25.dp)
+            .width(width)
             .clip(CircleShape)
-            .background(if(isSelect) Color.Red else Color.Gray)
+            .background(color)
     )
 }

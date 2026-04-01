@@ -1,10 +1,25 @@
 package org.example.travelingapp.navigation
 
-object Routes {
-    const val SPLASH = "Splash"
-    const val ON_BOARDING = "OnBoarding"
-    const val LOGIN = "Login"
-    const val REGISTER = "Register"
-    const val HOME = "Home"
-    const val RENT_CAR = "RentCar"
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface Route {
+
+    @Serializable
+    data object Splash : Route
+
+    @Serializable
+    data object OnBoarding : Route
+
+    @Serializable
+    data object Login : Route
+
+    @Serializable
+    data object Register : Route
+
+    @Serializable
+    data object Home : Route
+
+    @Serializable
+    data object RentCar : Route
 }

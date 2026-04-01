@@ -21,9 +21,8 @@ class UserRepositoryTest {
             data = listOf(
                 UserDto(
                     id = "u-1",
-                    name = "John",
+                    username = "John",
                     email = "john@mail.com",
-                    password = "123",
                     updatedAt = 5L
                 )
             )
@@ -55,8 +54,8 @@ class UserRepositoryTest {
             userDao = dao
         )
         val users = listOf(
-            UserEntity("id-1", "john", "john@mail.com", "123", 1L),
-            UserEntity("id-2", "mary", "mary@mail.com", "abc", 2L)
+            UserEntity("id-1", "john", "john@mail.com", 1L),
+            UserEntity("id-2", "mary", "mary@mail.com", 2L)
         )
 
         repository.insertUser(users)
@@ -94,5 +93,6 @@ class UserRepositoryTest {
         override suspend fun update(user: UserEntity) = Unit
         override suspend fun delete(user: UserEntity) = Unit
         override suspend fun deleteAll() = Unit
+        override suspend fun getUserByUsername(username: String): UserEntity? = null
     }
 }

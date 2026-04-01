@@ -9,5 +9,7 @@ data class UserEntity(
     val id: String,
     val username: String,
     val email: String,
-    val updateAt: Long
+    val updateAt: Long,
+    val passwordHash: String? = null,
+    val role: String? = null
 )

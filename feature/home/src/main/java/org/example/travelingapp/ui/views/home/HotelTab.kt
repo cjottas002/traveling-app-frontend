@@ -1,10 +1,8 @@
 package org.example.travelingapp.ui.views.home
 
-
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,20 +13,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import org.example.travelingapp.domain.entities.hotelmodel.Hotel
 import org.example.travelingapp.ui.theme.Dimens
-import org.example.travelingapp.ui.theme.ToolbarColor
-import org.example.travelingapp.ui.theme.White
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.VerticalSpacer
 import org.example.travelingapp.ui.views.home.viewmodels.HotelViewModel
@@ -38,14 +33,16 @@ fun HotelTab(hotelViewModel: HotelViewModel = hiltViewModel()) {
     val hotels by hotelViewModel.hotels.collectAsState(emptyList())
     val context = LocalContext.current
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Dimens.spacingSm)
+    ) {
         items(hotels, key = { it.id }) { hotel ->
             HotelItem(hotel) {
                 Toast.makeText(
                     context,
-                    "Selected hotel: ${hotel.address.locality}",
+                    hotel.address.locality,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -58,42 +55,44 @@ fun HotelItem(hotel: Hotel, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
+            .padding(vertical = Dimens.spacingSm)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(Dimens.small),
+        shape = RoundedCornerShape(Dimens.radiusLg),
+        elevation = CardDefaults.cardElevation(Dimens.elevationMd),
         colors = CardDefaults.cardColors(
-            containerColor = White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(Dimens.spacingMd)) {
             AsyncImage(
                 model = hotel.optimizedThumbUrls.srpDesktop,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(Dimens.cardImageHeight)
+                    .clip(RoundedCornerShape(Dimens.radiusMd))
             )
-            VerticalSpacer(Dimens.small)
+            VerticalSpacer(Dimens.spacingSm)
             AppText(
                 text = hotel.address.streetAddress,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = Bold
             )
             AppText(
                 text = hotel.address.locality,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             AppText(
                 text = "${hotel.ratePlan.price.current} €",
                 style = MaterialTheme.typography.titleLarge,
-                color = ToolbarColor,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = Bold
-
             )
             AppText(
-                text = "Rating: ${hotel.guestReviews.rating}",
-                style = MaterialTheme.typography.bodySmall
+                text = hotel.guestReviews.rating,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

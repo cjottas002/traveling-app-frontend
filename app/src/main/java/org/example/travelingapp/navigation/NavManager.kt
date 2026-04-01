@@ -24,41 +24,41 @@ fun NavManager(modifier: Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = if (store.value) Routes.LOGIN else Routes.SPLASH,
+        startDestination = if (store.value) Route.Login else Route.Splash,
         modifier = modifier
     ) {
-        composable(Routes.SPLASH) {
+        composable<Route.Splash> {
             SplashScreen(navController, store.value)
         }
-        composable(Routes.ON_BOARDING) {
+        composable<Route.OnBoarding> {
             MainOnBoarding(
                 store = dataStore,
                 onNavigateToLogin = {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.ON_BOARDING) { inclusive = true }
+                    navController.navigate(Route.Login) {
+                        popUpTo<Route.OnBoarding> { inclusive = true }
                     }
                 }
             )
         }
-        composable(Routes.LOGIN) {
+        composable<Route.Login> {
             LoginView(
-                onNavigateToHome = { navController.navigate(Routes.HOME) },
-                onNavigateToRegister = { navController.navigate(Routes.REGISTER) }
+                onNavigateToHome = { navController.navigate(Route.Home) },
+                onNavigateToRegister = { navController.navigate(Route.Register) }
             )
         }
-        composable(Routes.REGISTER) {
+        composable<Route.Register> {
             RegisterView(
                 navController = navController,
-                onNavigateToLogin = { navController.navigate(Routes.LOGIN) }
+                onNavigateToLogin = { navController.navigate(Route.Login) }
             )
         }
-        composable(Routes.HOME) {
+        composable<Route.Home> {
             HomeView(
                 navController = navController,
-                onNavigateToRentCar = { navController.navigate(Routes.RENT_CAR) }
+                onNavigateToRentCar = { navController.navigate(Route.RentCar) }
             )
         }
-        composable(Routes.RENT_CAR) {
+        composable<Route.RentCar> {
             RentCarView(navController)
         }
     }

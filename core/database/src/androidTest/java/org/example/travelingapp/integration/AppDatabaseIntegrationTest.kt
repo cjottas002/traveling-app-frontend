@@ -43,7 +43,6 @@ class AppDatabaseIntegrationTest {
             id = "u-1",
             username = "john",
             email = "john@mail.com",
-            password = "123",
             updateAt = 1L
         )
 

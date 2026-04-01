@@ -37,24 +37,20 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.example.travelingapp.feature.auth.R
-import org.example.travelingapp.ui.theme.BoxBackgroundColor
-import org.example.travelingapp.ui.theme.BoxStrokeColor
 import org.example.travelingapp.ui.theme.Dimens
-import org.example.travelingapp.ui.theme.GreenLight
-import org.example.travelingapp.ui.theme.TextInputBackground
 import org.example.travelingapp.ui.views.auth.viewmodel.AuthViewModel
 import org.example.travelingapp.ui.views.components.AppIconButton
 import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.AppTextField
 import org.example.travelingapp.ui.views.components.AppToolBar
-import org.example.travelingapp.ui.views.components.RegisterButton
+import org.example.travelingapp.ui.views.components.TravelPrimaryButton
 import org.example.travelingapp.ui.views.components.VerticalSpacer
 import org.example.travelingapp.ui.testtags.AuthTestTags
 
@@ -74,21 +70,19 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = innerPadding.calculateTopPadding())
-                .background(GreenLight)
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .testTag(AuthTestTags.REGISTER_SCREEN)
-                .padding(Dimens.medium),
+                .padding(Dimens.spacingMd),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ProfileImagePicker(LocalContext.current)
-            VerticalSpacer(Dimens.medium)
+            VerticalSpacer(Dimens.spacingMd)
             TextsAndButton(onNavigateToLogin)
-            VerticalSpacer(Dimens.medium)
+            VerticalSpacer(Dimens.spacingMd)
             PrivacyPolicyText(LocalContext.current)
         }
     }
-
-
 }
 
 @Composable
@@ -115,7 +109,7 @@ fun ProfileImagePicker(context: Context) {
         }
     }
 
-    Box(modifier = Modifier.size(200.dp)) {
+    Box(modifier = Modifier.size(Dimens.avatarLg)) {
         AppImage(
             bitmap = photoBitmap?.asImageBitmap(),
             resId = R.drawable.register_ic_profile,
@@ -126,11 +120,11 @@ fun ProfileImagePicker(context: Context) {
 
         AppIconButton(
             iconRes = R.drawable.register_ic_cam,
-            contentDescription = "Take photo",
+            contentDescription = stringResource(R.string.content_description_take_photo),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .size(48.dp),
-            iconSize = 48.dp
+                .size(Dimens.iconXl),
+            iconSize = Dimens.iconXl
         ) {
             permissionLauncher.launch(Manifest.permission.CAMERA)
         }
@@ -143,7 +137,6 @@ private fun TextsAndButton(
     onNavigateToLogin: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel(),
 ) {
-
     val name by authViewModel.username.collectAsState()
     val lastName by authViewModel.password.collectAsState()
     val isRegisterEnabled by authViewModel.isRegisterEnabled.collectAsState()
@@ -155,43 +148,31 @@ private fun TextsAndButton(
 
     AppTextField(
         value = name,
-        onValueChange = { username ->
-            authViewModel.onUsernameChanged(username)
-        },
-        containerColor = BoxBackgroundColor,
+        onValueChange = { authViewModel.onUsernameChanged(it) },
         labelRes = R.string.whats_your_name,
         leadingIconRes = R.drawable.login_ic_person,
         modifier = Modifier.testTag(AuthTestTags.REGISTER_NAME_FIELD)
     )
 
-    VerticalSpacer(8.dp)
+    VerticalSpacer(Dimens.spacingSm)
 
     AppTextField(
         value = lastName,
-        onValueChange = { pass ->
-            authViewModel.onPasswordChanged(pass)
-        },
-        containerColor = BoxBackgroundColor,
-        focusedBorderColor = BoxStrokeColor,
-        unfocusedBorderColor = BoxStrokeColor,
-        disabledContainerColor = TextInputBackground,
-        disabledBorderColor = BoxStrokeColor,
+        onValueChange = { authViewModel.onPasswordChanged(it) },
         labelRes = R.string.whats_your_lastname,
         leadingIconRes = R.drawable.login_ic_person,
         modifier = Modifier.testTag(AuthTestTags.REGISTER_LASTNAME_FIELD)
     )
 
-    VerticalSpacer(8.dp)
+    VerticalSpacer(Dimens.spacingSm)
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
-
         AppTextField(
             value = age,
             onValueChange = { },
-            containerColor = BoxBackgroundColor,
             labelRes = R.string.age,
             readOnly = true,
             trailingIconRes = R.drawable.onboarding3_arrow_down,
@@ -214,31 +195,29 @@ private fun TextsAndButton(
         }
     }
 
-    VerticalSpacer(Dimens.large)
+    VerticalSpacer(Dimens.spacingLg)
 
-    RegisterButton(
+    TravelPrimaryButton(
         textRes = R.string.sign_me_up,
         modifier = Modifier.testTag(AuthTestTags.REGISTER_SUBMIT_BUTTON),
+        enabled = isRegisterEnabled,
         onClick = {
             authViewModel.register(
-                onSuccess = {
-                    onNavigateToLogin()
-                },
+                onSuccess = { onNavigateToLogin() },
                 onError = { error ->
-                   Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 }
             )
-        },
-        enabled = isRegisterEnabled,
+        }
     )
 }
-
 
 @Composable
 private fun PrivacyPolicyText(context: Context) {
     AppText(
         textRes = R.string.privacy_policy,
         style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -247,6 +226,6 @@ private fun PrivacyPolicyText(context: Context) {
                 val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                 context.startActivity(intent)
             }
-            .padding(vertical = Dimens.small)
+            .padding(vertical = Dimens.spacingSm)
     )
 }

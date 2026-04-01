@@ -3,6 +3,7 @@ package org.example.travelingapp.ui.views.components
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -11,14 +12,12 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import org.example.travelingapp.ui.theme.BoxStrokeColor
-import org.example.travelingapp.ui.theme.TextInputBackground
+import org.example.travelingapp.ui.theme.Dimens
 
 @Composable
 fun AppTextField(
@@ -26,35 +25,34 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     @StringRes labelRes: Int,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    focusedBorderColor: Color = BoxStrokeColor,
-    unfocusedBorderColor: Color = BoxStrokeColor,
-    disabledContainerColor: Color = TextInputBackground,
-    disabledBorderColor: Color = BoxStrokeColor,
     keyboardType: KeyboardType = KeyboardType.Text,
     isPassword: Boolean = false,
     readOnly: Boolean = false,
     @DrawableRes leadingIconRes: Int? = null,
     @DrawableRes trailingIconRes: Int? = null
 ) {
-    val visualTransformation: VisualTransformation =
-        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
-
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
         readOnly = readOnly,
-        enabled = true,
-        label = { Text(stringResource(labelRes)) },
-        visualTransformation = visualTransformation,
+        label = {
+            Text(
+                text = stringResource(labelRes),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        textStyle = MaterialTheme.typography.bodyLarge,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        shape = RoundedCornerShape(Dimens.radiusMd),
         leadingIcon = leadingIconRes?.let { iconRes ->
             {
                 Icon(
                     painter = painterResource(id = iconRes),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
@@ -62,17 +60,19 @@ fun AppTextField(
             {
                 Icon(
                     painter = painterResource(id = iconRes),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         },
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
-            disabledContainerColor = disabledContainerColor,
-            focusedBorderColor = focusedBorderColor,
-            unfocusedBorderColor = unfocusedBorderColor,
-            disabledBorderColor = disabledBorderColor
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
         )
     )
 }

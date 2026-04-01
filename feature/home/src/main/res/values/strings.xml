@@ -7,4 +7,10 @@
     <string name="usa_los_angeles">USA, Los Angeles – 2 Weeks</string>
     <string name="city_of_los_angeles">City of Los Angeles</string>
     <string name="maldives_3_weeks">Maldives – 3 Weeks</string>
+    <string name="tab_explore">Explore</string>
+    <string name="tab_transport">Transport</string>
+    <string name="tab_hotels">Hotels</string>
+    <string name="tab_profile">Profile</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="coming_soon_description">This section is under development</string>
 </resources>

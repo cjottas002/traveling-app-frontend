@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding1_title">Tu app de viajes</string>
+    <string name="onboarding1_main_text">
+        Hola, buscamos a millones de usuarios con pasión por viajar.
+        Si eres tú, no lo dudes: abre nuestra app y descubre miles de
+        destinos y herramientas para alquilar coches, consultar el tiempo…
+    </string>
+    <string name="onboarding2_title">¡Encuentra tu destino!</string>
+    <string name="onboarding2_main_text">Hemos ayudado a millones de personas a encontrar su destino perfecto… ¡y tú eres el siguiente!</string>
+    <string name="onboarding3_title">Encuentra al compañero de viaje perfecto</string>
+    <string name="onboarding3_main_text">Hemos ayudado a millones de personas a encontrar su compañero ideal… ¡y tú eres el siguiente!</string>
+</resources>

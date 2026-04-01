@@ -9,7 +9,7 @@ import org.example.travelingapp.data.local.entities.UserEntity
 
 @Database(
     entities = [TransportEntity::class, UserEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

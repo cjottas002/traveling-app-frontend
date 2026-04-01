@@ -14,21 +14,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.example.travelingapp.domain.entities.PageData
 import org.example.travelingapp.ui.theme.Dimens
-import org.example.travelingapp.ui.theme.LilaFondo
-import org.example.travelingapp.ui.theme.MainOnboardingTextColor
-import org.example.travelingapp.ui.views.components.LoginButton
-import org.example.travelingapp.ui.views.components.NextButton
-import org.example.travelingapp.ui.views.components.SkipButton
+import org.example.travelingapp.ui.views.components.TravelPrimaryButton
+import org.example.travelingapp.ui.views.components.TravelSecondaryButton
 import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.VerticalSpacer
+import org.example.travelingapp.core.ui.R
 
 @Composable
 fun OnBoardingPage(
@@ -51,17 +44,23 @@ fun OnBoardingPage(
 @Composable
 private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(4.4f / 5f),
-        shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
-        color = LilaFondo
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(4.4f / 5f),
+        shape = RoundedCornerShape(bottomStart = Dimens.radiusXl, bottomEnd = Dimens.radiusXl),
+        color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Column(
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 16.dp),
+            modifier = Modifier.padding(
+                start = Dimens.spacingMd,
+                end = Dimens.spacingMd,
+                bottom = Dimens.spacingMd
+            ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            VerticalSpacer(Dimens.dp20)
+            VerticalSpacer(Dimens.spacingLg)
             TitleAndDescription(pageData, centered = true)
-            VerticalSpacer(Dimens.dp20)
+            VerticalSpacer(Dimens.spacingLg)
             AppImage(
                 resId = pageData.image,
                 contentDescription = null,
@@ -72,7 +71,13 @@ private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
         }
     }
 
-    NextButton(modifier = Modifier.fillMaxSize(), onClick = onNextClicked)
+    TravelPrimaryButton(
+        textRes = R.string.next,
+        onClick = onNextClicked,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Dimens.spacingMd)
+    )
 }
 
 @Composable
@@ -87,58 +92,65 @@ private fun SubsequentOnboardingPage(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                when {
-                    isLastPage -> MaterialTheme.colorScheme.tertiaryContainer
-                    else -> MaterialTheme.colorScheme.secondaryContainer
-                }
+                if (isLastPage)
+                    MaterialTheme.colorScheme.tertiaryContainer
+                else
+                    MaterialTheme.colorScheme.secondaryContainer
             )
-            .padding(start = 10.dp, end = 10.dp, bottom = 16.dp),
+            .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingMd),
         horizontalAlignment = Alignment.Start
     ) {
-        VerticalSpacer(Dimens.dp20)
+        VerticalSpacer(Dimens.spacingLg)
         TitleAndDescription(pageData, centered = false)
-        VerticalSpacer(Dimens.dp20)
+        VerticalSpacer(Dimens.spacingLg)
         AppImage(
-            resId =  pageData.image,
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f),
+            resId = pageData.image,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f),
             contentDescription = null,
         )
 
-        VerticalSpacer(Dimens.dp20)
+        VerticalSpacer(Dimens.spacingLg)
 
         if (!isLastPage) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
             ) {
-                SkipButton(modifier = Modifier.weight(1f), onClick = onSkipClicked)
-                NextButton(modifier = Modifier.weight(1f), onClick = onNextClicked)
+                TravelSecondaryButton(
+                    textRes = R.string.skip,
+                    onClick = onSkipClicked,
+                    modifier = Modifier.weight(1f)
+                )
+                TravelPrimaryButton(
+                    textRes = R.string.next,
+                    onClick = onNextClicked,
+                    modifier = Modifier.weight(1f)
+                )
             }
         } else {
-            LoginButton(modifier = Modifier.fillMaxWidth(), onClick = onLoginClicked)
+            TravelPrimaryButton(
+                textRes = R.string.login,
+                onClick = onLoginClicked
+            )
         }
     }
 }
-
 
 @Composable
 private fun TitleAndDescription(pageData: PageData, centered: Boolean) {
     AppText(
         text = pageData.title,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.Black,
-        textAlign = if (centered) TextAlign.Center else TextAlign.Start,
+        style = MaterialTheme.typography.headlineSmall,
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.fillMaxWidth()
     )
-    VerticalSpacer(10.dp)
+    VerticalSpacer(Dimens.spacingSm)
     AppText(
         text = pageData.desc,
-        fontSize = 16.sp,
-        color = MainOnboardingTextColor,
-        textAlign = if (centered) TextAlign.Center else TextAlign.Start,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.fillMaxWidth()
     )
 }
-
-

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beach_vacation">Vacaciones en la playa</string>
+    <string name="upcoming_meetups">Próximos encuentros</string>
+    <string name="eurodisney">Eurodisney</string>
+    <string name="rent_a_car">Alquilar coche</string>
+    <string name="usa_los_angeles">EE.UU., Los Ángeles – 2 semanas</string>
+    <string name="city_of_los_angeles">Ciudad de Los Ángeles</string>
+    <string name="maldives_3_weeks">Maldivas – 3 semanas</string>
+    <string name="tab_explore">Explorar</string>
+    <string name="tab_transport">Transporte</string>
+    <string name="tab_hotels">Hoteles</string>
+    <string name="tab_profile">Perfil</string>
+    <string name="coming_soon">Próximamente</string>
+    <string name="coming_soon_description">Esta sección está en desarrollo</string>
+</resources>

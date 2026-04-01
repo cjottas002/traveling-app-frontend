@@ -14,11 +14,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import org.example.travelingapp.core.ui.R
-import org.example.travelingapp.ui.theme.ToolbarColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,25 +30,25 @@ fun AppToolBar(
         modifier = Modifier.fillMaxWidth(),
         title = {
             Text(
-                text = stringResource(if(titleRes == 0) R.string.app_name else titleRes),
+                text = stringResource(if (titleRes == 0) R.string.app_name else titleRes),
                 style = MaterialTheme.typography.titleLarge
             )
         },
         navigationIcon = {
-            if(showBack){
+            if (showBack) {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Volver atrás"
+                        contentDescription = stringResource(R.string.content_description_go_back)
                     )
                 }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = ToolbarColor,
-            titleContentColor = Color.White,
-            navigationIconContentColor = Color.White,
-            actionIconContentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         actions = actions
     )

@@ -1,7 +1,6 @@
 package org.example.travelingapp.ui.views.home
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,15 +14,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
-import org.example.travelingapp.ui.theme.LightGray
-import org.example.travelingapp.ui.theme.White
 import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.VerticalSpacer
@@ -34,13 +29,12 @@ fun HomeTab() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(Dimens.medium)
+            .padding(Dimens.spacingMd)
     ) {
-
         AppText(
             textRes = R.string.upcoming_meetups,
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = Dimens.extraSmall)
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = Dimens.spacingXs)
         )
 
         MeetingCard(
@@ -66,44 +60,43 @@ fun MeetingCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = Dimens.medium),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(Dimens.small),
+            .padding(bottom = Dimens.spacingMd),
+        shape = RoundedCornerShape(Dimens.radiusLg),
+        elevation = CardDefaults.cardElevation(Dimens.elevationMd),
         colors = CardDefaults.cardColors(
-            containerColor = White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier
-                .padding(Dimens.medium)
-        ) {
-
+        Column(modifier = Modifier.padding(Dimens.spacingMd)) {
             AppImage(
                 resId = imageRes,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(Dimens.cardImageHeight)
+                    .clip(RoundedCornerShape(Dimens.radiusMd)),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
             )
 
-            VerticalSpacer(Dimens.small)
-            AppText(
-                modifier = Modifier.padding(horizontal = Dimens.small),
-                fontSize = 16.sp,
-                text = subtitle,
-                color = LightGray
+            VerticalSpacer(Dimens.spacingSm)
 
-            )
-            VerticalSpacer(Dimens.extraSmall)
             AppText(
-                modifier = Modifier.padding(horizontal = Dimens.small),
-                text = title,
-                fontSize = 20.sp,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
+                modifier = Modifier.padding(horizontal = Dimens.spacingSm),
+                text = subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            VerticalSpacer(8.dp)
+
+            VerticalSpacer(Dimens.spacingXs)
+
+            AppText(
+                modifier = Modifier.padding(horizontal = Dimens.spacingSm),
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            VerticalSpacer(Dimens.spacingSm)
         }
     }
 }

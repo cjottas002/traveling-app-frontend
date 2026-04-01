@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.stringResource
 import org.example.travelingapp.feature.onboarding.R
 import org.example.travelingapp.core.datastore.StoreBoarding
@@ -45,6 +45,6 @@ fun MainOnBoarding(store: StoreBoarding, onNavigateToLogin: () -> Unit) {
         onNavigateToLogin = onNavigateToLogin,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     )
 }

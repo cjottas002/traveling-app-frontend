@@ -51,7 +51,7 @@ fun TransportItem(transport: Transport, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Dimens.small)
+            .padding(Dimens.spacingSm)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
@@ -64,9 +64,9 @@ fun TransportItem(transport: Transport, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f).padding(start = Dimens.large)) {
+            Column(modifier = Modifier.weight(1f).padding(start = Dimens.spacingLg)) {
                 AppText(text = transport.name, style = MaterialTheme.typography.titleLarge)
-                VerticalSpacer(Dimens.medium)
+                VerticalSpacer(Dimens.spacingMd)
                 AppText(text = transport.price, style = MaterialTheme.typography.bodyMedium)
             }
             AppImage(

@@ -92,7 +92,7 @@ class ServiceContractsTest {
         server.enqueue(
             MockResponse().setResponseCode(200).setBody(
                 """
-                {"data":[{"id":"u-1","name":"John","email":"john@mail.com","password":"123","updatedAt":10}],"count":1,"errors":[],"success":true}
+                {"data":[{"id":"u-1","username":"John","email":"john@mail.com","updatedAt":10}],"count":1,"errors":[],"success":true}
                 """.trimIndent()
             )
         )
@@ -105,7 +105,7 @@ class ServiceContractsTest {
         val url = request.requestUrl!!
 
         assertEquals("GET", request.method)
-        assertEquals("/api/user/getAllUsers", url.encodedPath)
+        assertEquals("/api/user/list", url.encodedPath)
         assertEquals("2", url.queryParameter("pageIndex"))
         assertEquals("25", url.queryParameter("pageSize"))
         assertEquals("name", url.queryParameter("orderBy"))

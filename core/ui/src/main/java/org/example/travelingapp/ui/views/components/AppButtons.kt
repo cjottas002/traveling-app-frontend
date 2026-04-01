@@ -29,10 +29,10 @@ fun TravelPrimaryButton(
             .height(Dimens.buttonHeight),
         shape = RoundedCornerShape(Dimens.radiusMd),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary,
+            disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
+            disabledContentColor = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.4f)
         )
     ) {
         Text(

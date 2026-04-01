@@ -13,6 +13,11 @@ fun VerticalSpacer(height: Dp) {
 }
 
 @Composable
+fun VerticalSpacer(modifier: Modifier = Modifier, height: Dp) {
+    Spacer(modifier.height(height))
+}
+
+@Composable
 fun HorizontalSpacer(width: Dp) {
     Spacer(Modifier.width(width))
 }

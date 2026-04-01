@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import org.example.travelingapp.R
 import org.example.travelingapp.core.security.PasswordHasher
 import org.example.travelingapp.data.local.AppDatabase
+import org.example.travelingapp.data.local.daos.DestinationDao
 import org.example.travelingapp.data.local.daos.TransportDao
 import org.example.travelingapp.data.local.daos.UserDao
 import javax.inject.Singleton
@@ -78,5 +79,10 @@ object DatabaseModule {
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao {
         return db.userDao()
+    }
+
+    @Provides
+    fun provideDestinationDao(db: AppDatabase): DestinationDao {
+        return db.destinationDao()
     }
 }

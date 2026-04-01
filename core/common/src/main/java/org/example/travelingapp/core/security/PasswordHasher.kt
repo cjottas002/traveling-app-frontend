@@ -7,13 +7,14 @@ import javax.crypto.spec.PBEKeySpec
 
 /**
  * PBKDF2 password hashing for offline credential caching.
- * Uses PBKDF2WithHmacSHA256 with 120,000 iterations (OWASP 2024 recommendation).
+ * Uses PBKDF2WithHmacSHA256 with 10,000 iterations.
+ * Optimized for mobile devices — this is local cache only, not a server-side store.
  * Format: "{iterations}:{salt_base64}:{hash_base64}"
  */
 object PasswordHasher {
 
     private const val ALGORITHM = "PBKDF2WithHmacSHA256"
-    private const val ITERATIONS = 120_000
+    private const val ITERATIONS = 10_000
     private const val KEY_LENGTH = 256
     private const val SALT_LENGTH = 16
 

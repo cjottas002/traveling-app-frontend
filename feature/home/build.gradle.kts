@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
+    implementation(project(":core:datastore"))
 
     implementation(libs.coil.compose)
     implementation(libs.material.icons.extended)

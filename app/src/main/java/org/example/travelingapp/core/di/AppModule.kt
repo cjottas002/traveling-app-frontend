@@ -10,10 +10,16 @@ import org.example.travelingapp.data.remote.services.IUserService
 import org.example.travelingapp.core.network.AndroidNetworkChecker
 import org.example.travelingapp.core.network.NetworkExecutor
 import org.example.travelingapp.core.network.interfaces.INetworkChecker
+import org.example.travelingapp.data.local.daos.DestinationDao
 import org.example.travelingapp.data.remote.services.IAccountService
+import org.example.travelingapp.data.remote.services.IDestinationService
 import org.example.travelingapp.data.remote.services.IHotelService
+import org.example.travelingapp.data.repository.DestinationRepository
+import org.example.travelingapp.domain.repository.IDestinationRepository
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -28,8 +34,15 @@ object AppModule {
     @Singleton
     @Named("BackendRetrofit")
     fun provideBackendRetrofit(): Retrofit {
+        val client = OkHttpClient.Builder()
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL_BACKEND)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -64,6 +77,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDestinationService(@Named("BackendRetrofit") retrofit: Retrofit): IDestinationService {
+        return retrofit.create(IDestinationService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideNetworkChecker(@ApplicationContext context: Context): INetworkChecker {
         return AndroidNetworkChecker(context)
     }
@@ -72,5 +91,14 @@ object AppModule {
     @Singleton
     fun provideNetworkExecutor(networkChecker: INetworkChecker): NetworkExecutor {
         return NetworkExecutor(networkChecker)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDestinationRepository(
+        destinationService: IDestinationService,
+        destinationDao: DestinationDao
+    ): IDestinationRepository {
+        return DestinationRepository(destinationService, destinationDao)
     }
 }

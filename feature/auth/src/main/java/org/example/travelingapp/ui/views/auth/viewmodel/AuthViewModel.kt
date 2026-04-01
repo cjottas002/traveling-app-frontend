@@ -79,31 +79,29 @@ class AuthViewModel @Inject constructor(
             onError(context.getString(R.string.register_error_empty_fields))
             return
         }
-        networkExecutor.executeWithNetworkCheck(
-            onlineAction = { loginOnlineAction(user, pass, onSuccess, onError) },
-            offlineAction = { loginOfflineAction(user, pass, onSuccess, onError) }
-        )
-    }
 
-    private fun loginOnlineAction(
-        username: String,
-        pass: String,
-        onSuccess: (String) -> Unit,
-        onError: (String) -> Unit,
-    ) {
         viewModelScope.launch {
-            runCatching { accountRepository.remoteLogin(username, pass) }
-                .onFailure {
-                    // Network failure — fallback to offline login
-                    loginOfflineAction(username, pass, onSuccess, onError)
-                    return@launch
-                }
+            // 1. Try offline first (instant)
+            val offlineResponse = accountRepository.localLogin(user, pass)
+            if (offlineResponse.success && offlineResponse.data != null) {
+                tokenManager.saveToken(offlineResponse.data!!.token)
+                onSuccess(offlineResponse.data!!.token)
+                return@launch
+            }
+
+            // 2. No cached credentials — must go online
+            runCatching { accountRepository.remoteLogin(user, pass) }
                 .onSuccess { response ->
-                    response.takeIf { it.success }?.data?.token?.also { token ->
-                        tokenManager.saveToken(token)
+                    if (response.success && response.data?.token != null) {
+                        tokenManager.saveToken(response.data!!.token)
                         syncServerData()
-                        onSuccess(token)
-                    } ?: onError(response.errors.joinToString("\n") { it.message })
+                        onSuccess(response.data!!.token)
+                    } else {
+                        onError(response.errors.joinToString("\n") { it.message })
+                    }
+                }
+                .onFailure {
+                    onError(context.getString(R.string.login_failed))
                 }
         }
     }

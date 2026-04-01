@@ -1,62 +1,83 @@
 package org.example.travelingapp.ui.views.home
 
-import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import coil.compose.AsyncImage
+import org.example.travelingapp.domain.entities.Destination
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
-import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.VerticalSpacer
+import org.example.travelingapp.ui.views.home.viewmodels.DestinationViewModel
 
 @Composable
-fun HomeTab() {
-    Column(
+fun HomeTab(viewModel: DestinationViewModel = hiltViewModel()) {
+    val destinations by viewModel.destinations.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(Dimens.spacingMd)
     ) {
-        AppText(
-            textRes = R.string.upcoming_meetups,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = Dimens.spacingXs)
-        )
+        item {
+            AppText(
+                textRes = R.string.upcoming_meetups,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = Dimens.spacingSm)
+            )
+        }
 
-        MeetingCard(
-            imageRes = R.drawable.home_image_1,
-            subtitle = stringResource(R.string.usa_los_angeles),
-            title = stringResource(R.string.city_of_los_angeles)
-        )
+        if (isLoading && destinations.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(Dimens.spacingXl),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                }
+            }
+        }
 
-        MeetingCard(
-            imageRes = R.drawable.home_image_2,
-            subtitle = stringResource(R.string.maldives_3_weeks),
-            title = stringResource(R.string.beach_vacation)
-        )
+        if (destinations.isEmpty() && !isLoading) {
+            item {
+                AppText(
+                    text = stringResource(R.string.coming_soon_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(Dimens.spacingMd)
+                )
+            }
+        }
+
+        items(destinations, key = { it.id }) { destination ->
+            DestinationCard(destination = destination)
+        }
     }
 }
 
 @Composable
-fun MeetingCard(
-    @DrawableRes imageRes: Int,
-    subtitle: String,
-    title: String,
-) {
+fun DestinationCard(destination: Destination) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -68,35 +89,41 @@ fun MeetingCard(
         )
     ) {
         Column(modifier = Modifier.padding(Dimens.spacingMd)) {
-            AppImage(
-                resId = imageRes,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Dimens.cardImageHeight)
-                    .clip(RoundedCornerShape(Dimens.radiusMd)),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-            )
-
-            VerticalSpacer(Dimens.spacingSm)
+            if (destination.imageUrl.isNotBlank()) {
+                AsyncImage(
+                    model = destination.imageUrl,
+                    contentDescription = destination.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dimens.cardImageHeight)
+                        .clip(RoundedCornerShape(Dimens.radiusMd)),
+                    contentScale = ContentScale.Crop
+                )
+                VerticalSpacer(Dimens.spacingSm)
+            }
 
             AppText(
-                modifier = Modifier.padding(horizontal = Dimens.spacingSm),
-                text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = destination.name,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             VerticalSpacer(Dimens.spacingXs)
 
             AppText(
-                modifier = Modifier.padding(horizontal = Dimens.spacingSm),
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                text = "${destination.country} · ${destination.category}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            VerticalSpacer(Dimens.spacingSm)
+            if (destination.description.isNotBlank()) {
+                VerticalSpacer(Dimens.spacingXs)
+                AppText(
+                    text = destination.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

@@ -4,11 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -24,6 +21,7 @@ import org.example.travelingapp.ui.views.components.TravelPrimaryButton
 import org.example.travelingapp.ui.views.components.TravelSecondaryButton
 import org.example.travelingapp.ui.views.components.AppImage
 import org.example.travelingapp.ui.views.components.AppText
+import org.example.travelingapp.ui.views.components.PagerIndicator
 import org.example.travelingapp.ui.views.components.VerticalSpacer
 import org.example.travelingapp.core.ui.R
 
@@ -32,19 +30,26 @@ fun OnBoardingPage(
     pageData: PageData,
     isFirstPage: Boolean = false,
     isLastPage: Boolean = false,
+    currentPage: Int = 0,
+    pageCount: Int = 3,
     onNextClicked: () -> Unit = {},
     onSkipClicked: () -> Unit = {},
     onLoginClicked: () -> Unit = {},
 ) {
     if (isFirstPage) {
-        FirstOnboarding(pageData, onNextClicked)
+        FirstOnboarding(pageData, currentPage, pageCount, onNextClicked)
     } else {
-        SubsequentOnboardingPage(pageData, isLastPage, onSkipClicked, onNextClicked, onLoginClicked)
+        SubsequentOnboardingPage(pageData, isLastPage, currentPage, pageCount, onSkipClicked, onNextClicked, onLoginClicked)
     }
 }
 
 @Composable
-private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
+private fun FirstOnboarding(
+    pageData: PageData,
+    currentPage: Int,
+    pageCount: Int,
+    onNextClicked: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -75,17 +80,23 @@ private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
             }
         }
 
+        VerticalSpacer(Dimens.spacingSm)
+
         TravelPrimaryButton(
             textRes = R.string.next,
             onClick = onNextClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingSm)
+                .padding(horizontal = Dimens.spacingMd)
         )
 
-        Spacer(modifier = Modifier
-            .navigationBarsPadding()
-            .height(Dimens.spacingXl)
+        VerticalSpacer(Dimens.spacingSm)
+
+        PagerIndicator(size = pageCount, currentPage = currentPage)
+
+        VerticalSpacer(
+            modifier = Modifier.navigationBarsPadding(),
+            height = Dimens.spacingSm
         )
     }
 }
@@ -94,6 +105,8 @@ private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
 private fun SubsequentOnboardingPage(
     pageData: PageData,
     isLastPage: Boolean,
+    currentPage: Int,
+    pageCount: Int,
     onSkipClicked: () -> Unit,
     onNextClicked: () -> Unit,
     onLoginClicked: () -> Unit,
@@ -147,9 +160,17 @@ private fun SubsequentOnboardingPage(
             )
         }
 
-        Spacer(modifier = Modifier
-            .navigationBarsPadding()
-            .height(Dimens.spacingLg)
+        VerticalSpacer(Dimens.spacingSm)
+
+        PagerIndicator(
+            size = pageCount,
+            currentPage = currentPage,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
+        VerticalSpacer(
+            modifier = Modifier.navigationBarsPadding(),
+            height = Dimens.spacingSm
         )
     }
 }

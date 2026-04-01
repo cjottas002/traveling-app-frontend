@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -79,6 +80,7 @@ private fun FirstOnboarding(pageData: PageData, onNextClicked: () -> Unit) {
         onClick = onNextClicked,
         modifier = Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .padding(Dimens.spacingMd)
     )
 }
@@ -101,6 +103,7 @@ private fun SubsequentOnboardingPage(
                     MaterialTheme.colorScheme.secondaryContainer
             )
             .statusBarsPadding()
+            .navigationBarsPadding()
             .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingMd),
         horizontalAlignment = Alignment.Start
     ) {

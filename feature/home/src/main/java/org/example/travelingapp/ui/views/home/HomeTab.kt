@@ -1,5 +1,6 @@
 package org.example.travelingapp.ui.views.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
 import org.example.travelingapp.domain.entities.Destination
 import org.example.travelingapp.feature.home.R
@@ -90,15 +93,31 @@ fun DestinationCard(destination: Destination) {
     ) {
         Column(modifier = Modifier.padding(Dimens.spacingMd)) {
             if (destination.imageUrl.isNotBlank()) {
-                AsyncImage(
-                    model = destination.imageUrl,
-                    contentDescription = destination.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Dimens.cardImageHeight)
-                        .clip(RoundedCornerShape(Dimens.radiusMd)),
-                    contentScale = ContentScale.Crop
-                )
+                val imageModifier = Modifier
+                    .fillMaxWidth()
+                    .height(Dimens.cardImageHeight)
+                    .clip(RoundedCornerShape(Dimens.radiusMd))
+
+                if (destination.imageUrl.startsWith("local:")) {
+                    val resName = destination.imageUrl.removePrefix("local:")
+                    val context = LocalContext.current
+                    val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
+                    if (resId != 0) {
+                        Image(
+                            painter = painterResource(id = resId),
+                            contentDescription = destination.name,
+                            modifier = imageModifier,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                } else {
+                    AsyncImage(
+                        model = destination.imageUrl,
+                        contentDescription = destination.name,
+                        modifier = imageModifier,
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 VerticalSpacer(Dimens.spacingSm)
             }
 

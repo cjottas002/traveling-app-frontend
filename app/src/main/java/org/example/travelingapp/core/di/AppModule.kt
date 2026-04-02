@@ -14,7 +14,9 @@ import org.example.travelingapp.data.local.daos.DestinationDao
 import org.example.travelingapp.data.remote.services.IAccountService
 import org.example.travelingapp.data.remote.services.IDestinationService
 import org.example.travelingapp.data.remote.services.IHotelService
+import org.example.travelingapp.data.local.daos.PendingOperationDao
 import org.example.travelingapp.data.repository.DestinationRepository
+import org.example.travelingapp.data.sync.SyncManager
 import org.example.travelingapp.domain.repository.IDestinationRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -95,10 +97,20 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideSyncManager(
+        pendingOperationDao: PendingOperationDao,
+        @ApplicationContext context: Context
+    ): SyncManager {
+        return SyncManager(pendingOperationDao, context)
+    }
+
+    @Provides
+    @Singleton
     fun provideDestinationRepository(
         destinationService: IDestinationService,
-        destinationDao: DestinationDao
+        destinationDao: DestinationDao,
+        syncManager: SyncManager
     ): IDestinationRepository {
-        return DestinationRepository(destinationService, destinationDao)
+        return DestinationRepository(destinationService, destinationDao, syncManager)
     }
 }

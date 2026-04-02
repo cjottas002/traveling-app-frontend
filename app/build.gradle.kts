@@ -70,7 +70,12 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
     ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.work.compiler)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime)
 
     // Room (needed for DatabaseModule in app)
     implementation(libs.androidx.room.runtime)

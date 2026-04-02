@@ -27,4 +27,7 @@ interface DestinationDao {
 
     @Query("SELECT * FROM destinations WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): DestinationEntity?
+
+    @Query("DELETE FROM destinations WHERE id = :id")
+    suspend fun deleteById(id: String)
 }

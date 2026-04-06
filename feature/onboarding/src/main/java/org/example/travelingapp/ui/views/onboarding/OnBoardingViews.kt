@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,14 +18,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.example.travelingapp.domain.entities.PageData
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 import org.example.travelingapp.ui.views.components.TravelPrimaryButton
 import org.example.travelingapp.ui.views.components.TravelSecondaryButton
 import org.example.travelingapp.ui.views.components.AppText
 import org.example.travelingapp.ui.views.components.PagerIndicator
 import org.example.travelingapp.ui.views.components.VerticalSpacer
 import org.example.travelingapp.core.ui.R
+import org.example.travelingapp.feature.onboarding.R as OnboardingR
 
 @Composable
 fun OnBoardingPage(
@@ -64,7 +67,8 @@ fun OnBoardingPage(
                 .fillMaxSize()
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingMd),
+                .padding(horizontal = Dimens.screenPadding)
+                .padding(bottom = Dimens.screenBottomPadding),
             verticalArrangement = Arrangement.Bottom
         ) {
             AppText(
@@ -81,7 +85,7 @@ fun OnBoardingPage(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            VerticalSpacer(Dimens.spacingXl)
+            VerticalSpacer(Dimens.sectionSpacing)
 
             if (isFirstPage) {
                 TravelPrimaryButton(
@@ -113,7 +117,7 @@ fun OnBoardingPage(
                 )
             }
 
-            VerticalSpacer(Dimens.spacingMd)
+            VerticalSpacer(Dimens.cardSpacing)
 
             PagerIndicator(
                 size = pageCount,
@@ -125,5 +129,59 @@ fun OnBoardingPage(
 
             VerticalSpacer(Dimens.spacingSm)
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Onboarding - First")
+@Composable
+private fun OnBoardingPageFirstPreview() {
+    TravelingAppTheme {
+        OnBoardingPage(
+            pageData = PageData(
+                image = OnboardingR.drawable.onboarding1_image,
+                title = "Your travel app",
+                desc = "Hello, we're looking for millions of users with a passion for travel."
+            ),
+            isFirstPage = true,
+            isLastPage = false,
+            currentPage = 0,
+            pageCount = 3
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Onboarding - Middle")
+@Composable
+private fun OnBoardingPageMiddlePreview() {
+    TravelingAppTheme {
+        OnBoardingPage(
+            pageData = PageData(
+                image = OnboardingR.drawable.onboarding2_image,
+                title = "Find Your Match!",
+                desc = "We've helped millions across the nation find their perfect match."
+            ),
+            isFirstPage = false,
+            isLastPage = false,
+            currentPage = 1,
+            pageCount = 3
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Onboarding - Last")
+@Composable
+private fun OnBoardingPageLastPreview() {
+    TravelingAppTheme {
+        OnBoardingPage(
+            pageData = PageData(
+                image = OnboardingR.drawable.onboarding3_image,
+                title = "Find the Perfect Roommate",
+                desc = "We've helped millions across the nation find their perfect match."
+            ),
+            isFirstPage = false,
+            isLastPage = true,
+            currentPage = 2,
+            pageCount = 3
+        )
     }
 }

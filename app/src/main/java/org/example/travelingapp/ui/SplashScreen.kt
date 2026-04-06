@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import org.example.travelingapp.R
 import org.example.travelingapp.navigation.Route
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 
 @Composable
 fun SplashScreen(navController: NavController, store: Boolean) {
@@ -26,6 +28,12 @@ fun SplashScreen(navController: NavController, store: Boolean) {
         navController.navigate(destination)
     }
 
+    SplashContent()
+}
+
+/** Stateless splash UI extracted so previews can render without a navigator. */
+@Composable
+private fun SplashContent() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -38,5 +46,13 @@ fun SplashScreen(navController: NavController, store: Boolean) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+    }
+}
+
+@Preview(showBackground = true, name = "Splash")
+@Composable
+private fun SplashScreenPreview() {
+    TravelingAppTheme {
+        SplashContent()
     }
 }

@@ -9,10 +9,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 
 @Composable
 fun TravelPrimaryButton(
@@ -84,5 +88,27 @@ fun TravelTextButton(
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
+    }
+}
+
+@Preview(showBackground = true, name = "Buttons")
+@Composable
+private fun ButtonsPreview() {
+    TravelingAppTheme {
+        Column(modifier = Modifier.padding(Dimens.screenPadding)) {
+            TravelPrimaryButton(textRes = android.R.string.ok, onClick = {})
+            androidx.compose.foundation.layout.Spacer(
+                Modifier.padding(Dimens.spacingSm)
+            )
+            TravelPrimaryButton(textRes = android.R.string.ok, onClick = {}, enabled = false)
+            androidx.compose.foundation.layout.Spacer(
+                Modifier.padding(Dimens.spacingSm)
+            )
+            TravelSecondaryButton(textRes = android.R.string.cancel, onClick = {})
+            androidx.compose.foundation.layout.Spacer(
+                Modifier.padding(Dimens.spacingSm)
+            )
+            TravelTextButton(textRes = android.R.string.ok, onClick = {})
+        }
     }
 }

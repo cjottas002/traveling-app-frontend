@@ -52,4 +52,13 @@ object Dimens {
     val elevationSm: Dp = 1.dp
     val elevationMd: Dp = 3.dp
     val elevationLg: Dp = 6.dp
+
+    // ── Layout tokens ──────────────────────────────────────
+    // Semantic spacing that every screen should consume instead of hardcoding
+    // raw `spacingLg` etc. Tweaking these values here re-flows the entire app.
+    val screenPadding: Dp = 24.dp        // horizontal margins at the root of a screen
+    val screenBottomPadding: Dp = 24.dp  // breathing room above the navigation bar
+    val cardPadding: Dp = 24.dp          // inner padding inside a TravelCard
+    val cardSpacing: Dp = 16.dp          // gap between children of a card
+    val sectionSpacing: Dp = 24.dp       // gap between sections of a screen
 }

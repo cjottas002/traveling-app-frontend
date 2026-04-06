@@ -22,7 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.tooling.preview.Preview
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 import org.example.travelingapp.core.ui.R as CoreR
 
 @Composable
@@ -105,4 +110,29 @@ fun AppTextField(
             cursorColor = MaterialTheme.colorScheme.primary
         )
     )
+}
+
+@Preview(showBackground = true, name = "Text fields")
+@Composable
+private fun AppTextFieldPreview() {
+    TravelingAppTheme {
+        var user by remember { mutableStateOf("") }
+        var pass by remember { mutableStateOf("Admin123!") }
+        Column(modifier = Modifier.padding(Dimens.screenPadding)) {
+            AppTextField(
+                value = user,
+                onValueChange = { user = it },
+                labelRes = android.R.string.search_go
+            )
+            androidx.compose.foundation.layout.Spacer(
+                Modifier.padding(Dimens.spacingSm)
+            )
+            AppTextField(
+                value = pass,
+                onValueChange = { pass = it },
+                labelRes = android.R.string.unknownName,
+                isPassword = true
+            )
+        }
+    }
 }

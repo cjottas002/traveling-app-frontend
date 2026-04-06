@@ -17,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 
 @Composable
 fun PagerIndicator(
@@ -65,4 +67,19 @@ private fun Indicator(
             .clip(CircleShape)
             .background(color)
     )
+}
+
+@Preview(showBackground = true, name = "Pager indicator")
+@Composable
+private fun PagerIndicatorPreview() {
+    TravelingAppTheme {
+        androidx.compose.foundation.layout.Column(
+            verticalArrangement = Arrangement.spacedBy(Dimens.spacingMd),
+            modifier = Modifier.padding(Dimens.screenPadding)
+        ) {
+            PagerIndicator(size = 3, currentPage = 0)
+            PagerIndicator(size = 3, currentPage = 1)
+            PagerIndicator(size = 3, currentPage = 2)
+        }
+    }
 }

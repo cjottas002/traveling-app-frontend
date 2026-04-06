@@ -1,6 +1,7 @@
 package org.example.travelingapp.ui.views.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,4 +66,35 @@ fun AppText(
         maxLines = maxLines,
         overflow = overflow
     )
+}
+
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true, name = "Text styles")
+@Composable
+private fun AppTextPreview() {
+    org.example.travelingapp.ui.theme.TravelingAppTheme {
+        androidx.compose.foundation.layout.Column(
+            modifier = Modifier.padding(org.example.travelingapp.ui.theme.Dimens.screenPadding)
+        ) {
+            AppText(
+                text = "Headline Medium",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            AppText(
+                text = "Title Large",
+                style = MaterialTheme.typography.titleLarge
+            )
+            AppText(
+                text = "Body Large — the quick brown fox jumps over the lazy dog.",
+                style = MaterialTheme.typography.bodyLarge
+            )
+            AppText(
+                text = "Body Medium — smaller support text.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            AppText(
+                text = "Label Small caption",
+                style = MaterialTheme.typography.labelSmall
+            )
+        }
+    }
 }

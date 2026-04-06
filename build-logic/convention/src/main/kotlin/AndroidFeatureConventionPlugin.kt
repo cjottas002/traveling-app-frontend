@@ -30,6 +30,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx-hilt-navigation-compose").get())
                 add("implementation", libs.findLibrary("androidx-navigation-compose").get())
                 add("implementation", libs.findLibrary("androidx-lifecycle-runtime-ktx").get())
+                // Required for @Preview rendering inside Android Studio when
+                // the composable lives in a library module instead of :app.
+                add("debugImplementation", libs.findLibrary("androidx-ui-tooling").get())
             }
         }
     }

@@ -72,6 +72,7 @@
     <string name="destination_image_url">URL de imagen (opcional)</string>
     <string name="no_destinations">Aún no hay destinos</string>
     <string name="destination_detail">Destino</string>
+    <string name="destination_not_found">Destino no encontrado.</string>
     <string name="edit_destination">Editar</string>
     <string name="delete_destination">Eliminar</string>
     <string name="delete_destination_confirm">¿Estás seguro de que quieres eliminar este destino?</string>

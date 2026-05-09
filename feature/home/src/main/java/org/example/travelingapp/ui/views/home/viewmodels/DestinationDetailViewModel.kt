@@ -43,7 +43,7 @@ class DestinationDetailViewModel @Inject constructor(
     private var loaded = false
 
     fun loadIfNeeded(id: String) {
-        if (loaded) return
+        if (loaded && destinationId == id) return
         loaded = true
         destinationId = id
         load()

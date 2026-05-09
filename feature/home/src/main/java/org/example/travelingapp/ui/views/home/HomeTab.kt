@@ -57,6 +57,7 @@ import java.time.LocalTime
 @Composable
 fun HomeTab(
     isAdmin: Boolean = false,
+    onNavigateToRentCar: () -> Unit = {},
     onCreateDestination: () -> Unit = {},
     onDestinationClick: (String) -> Unit = {},
     viewModel: DestinationViewModel = hiltViewModel()
@@ -71,6 +72,7 @@ fun HomeTab(
         username = username,
         isAdmin = isAdmin,
         onRefresh = viewModel::refresh,
+        onNavigateToRentCar = onNavigateToRentCar,
         onCreateDestination = onCreateDestination,
         onDestinationClick = onDestinationClick
     )
@@ -84,6 +86,7 @@ private fun HomeTabContent(
     username: String?,
     isAdmin: Boolean,
     onRefresh: () -> Unit,
+    onNavigateToRentCar: () -> Unit,
     onCreateDestination: () -> Unit,
     onDestinationClick: (String) -> Unit
 ) {
@@ -131,6 +134,13 @@ private fun HomeTabContent(
                         )
                         TravelVerticalSpacer(Dimens.sectionSpacing)
                     }
+                }
+
+                item {
+                    HomeSectionLabel(label = stringResource(R.string.home_section_services))
+                    TravelVerticalSpacer(Dimens.spacingMd)
+                    RentCarServiceRow(onClick = onNavigateToRentCar)
+                    TravelVerticalSpacer(Dimens.sectionSpacing)
                 }
 
                 if (destinations.size > 1) {
@@ -237,6 +247,15 @@ private fun Avatar(displayName: String) {
 }
 
 @Composable
+private fun HomeSectionLabel(label: String) {
+    Text(
+        text = "— ${label.uppercase()}",
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+}
+
+@Composable
 private fun SectionHeader(label: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -252,6 +271,49 @@ private fun SectionHeader(label: String) {
             text = stringResource(R.string.home_view_all).uppercase(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@Composable
+private fun RentCarServiceRow(onClick: () -> Unit) {
+    TravelHairlineRow(
+        onClick = onClick,
+        leading = {
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(Dimens.radiusXs))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.pestania1_classiccar),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(Dimens.spacingXs),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        },
+        trailing = {
+            Text(
+                text = stringResource(R.string.home_rentcar_action).uppercase(),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
+        }
+    ) {
+        Text(
+            text = stringResource(R.string.home_rentcar_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Text(
+            text = stringResource(R.string.home_rentcar_meta).uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -409,6 +471,7 @@ private fun HomeTabContentPreview() {
             username = "isabel.morais",
             isAdmin = true,
             onRefresh = {},
+            onNavigateToRentCar = {},
             onCreateDestination = {},
             onDestinationClick = {}
         )

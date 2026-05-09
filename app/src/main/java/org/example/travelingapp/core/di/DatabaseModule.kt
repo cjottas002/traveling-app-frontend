@@ -42,14 +42,12 @@ object DatabaseModule {
 
     private fun seedTransports(db: SupportSQLiteDatabase) {
         val transports = listOf(
-            "AirPlane"     to R.drawable.pestania1_airplain     to "$11/day",
-            "Bus"          to R.drawable.pestania1_bus          to "$14/day",
-            "Classic Car"  to R.drawable.pestania1_classiccar   to "$34/day",
-            "Electric Car" to R.drawable.pestania1_electriccar  to "$45/day",
-            "Flying Car"   to R.drawable.pestania1_flyingcar    to "$500/day",
-            "MotorHome"    to R.drawable.pestania1_motorhome    to "$23/day",
-            "PickUp Car"   to R.drawable.pestania1_pickupcar    to "$10/day",
-            "Sport Car"    to R.drawable.pestania1_sportcart    to "$55/day"
+            "Flight Madrid -> Marrakech" to R.drawable.pestania1_airplain to "€ 184",
+            "Flight Barcelona -> Casablanca" to R.drawable.pestania1_airplain to "€ 96",
+            "Train Rabat -> Fes" to R.drawable.ic_transport_train to "€ 24",
+            "Train Tangier -> Casablanca" to R.drawable.ic_transport_train to "€ 31",
+            "Bus Marrakech -> Essaouira" to R.drawable.pestania1_bus to "€ 12",
+            "Bus Fes -> Chefchaouen" to R.drawable.pestania1_bus to "€ 18"
         )
 
         transports.forEach { (nameAndRes, price) ->

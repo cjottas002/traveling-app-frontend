@@ -15,6 +15,10 @@
     <string name="home_title">Picked</string>
     <string name="home_title_accent">for you.</string>
     <string name="home_selected_count">%1$d selected destinations</string>
+    <string name="home_section_services">Trip services</string>
+    <string name="home_rentcar_title">Car rental</string>
+    <string name="home_rentcar_meta">Available at destination · from €10/day</string>
+    <string name="home_rentcar_action">Open</string>
     <string name="home_section_nearby">Near you</string>
     <string name="home_view_all">View all →</string>
     <string name="no_destinations">No destinations yet.</string>
@@ -41,17 +45,38 @@
     <string name="transport_kicker">Move</string>
     <string name="transport_title">How you</string>
     <string name="transport_title_accent">arrive.</string>
+    <string name="transport_results_count">%1$d routes available</string>
+    <string name="transport_filter_flights">Flights</string>
+    <string name="transport_filter_trains">Trains</string>
+    <string name="transport_filter_buses">Buses</string>
+    <string name="transport_empty">No routes match this transport type.</string>
+    <string name="transport_direct_route">Direct route</string>
+    <string name="transport_price_label">From</string>
 
-    <!-- Profile placeholder + RentCar placeholder -->
+    <!-- Profile placeholder + RentCar catalog -->
     <string name="empty_glyph">Aa</string>
     <string name="profile_empty_title">We\'re still</string>
     <string name="profile_empty_accent">building this.</string>
     <string name="profile_empty_body">The profile section will be available this spring. We\'ll let you know.</string>
     <string name="empty_badge_soon">Coming soon</string>
     <string name="rent_a_car">Car rental</string>
-    <string name="rentcar_empty_title">We\'re still</string>
-    <string name="rentcar_empty_accent">building this.</string>
-    <string name="rentcar_empty_body">The rental module will be available this spring. We\'ll let you know.</string>
+    <string name="rentcar_kicker">Drive</string>
+    <string name="rentcar_title">Choose your</string>
+    <string name="rentcar_title_accent">car.</string>
+    <string name="rentcar_results_count">%1$d cars available</string>
+    <string name="rentcar_per_day">/ day</string>
+    <string name="rentcar_classic_car">Classic car</string>
+    <string name="rentcar_electric_car">Electric car</string>
+    <string name="rentcar_flying_car">Flying car</string>
+    <string name="rentcar_motorhome">Motorhome</string>
+    <string name="rentcar_pickup_car">Pickup car</string>
+    <string name="rentcar_sport_car">Sport car</string>
+    <string name="rentcar_category_classic">Classic</string>
+    <string name="rentcar_category_electric">Electric</string>
+    <string name="rentcar_category_premium">Premium</string>
+    <string name="rentcar_category_family">Family</string>
+    <string name="rentcar_category_utility">Utility</string>
+    <string name="rentcar_category_sport">Sport</string>
     <string name="coming_soon">Coming soon</string>
     <string name="coming_soon_description">This section is under development</string>
 

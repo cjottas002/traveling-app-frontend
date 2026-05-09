@@ -36,6 +36,7 @@ fun HomeView(
         when (page) {
             0 -> HomeTab(
                 isAdmin = isAdmin,
+                onNavigateToRentCar = onNavigateToRentCar,
                 onCreateDestination = onNavigateToCreateDestination,
                 onDestinationClick = onNavigateToDestinationDetail
             )

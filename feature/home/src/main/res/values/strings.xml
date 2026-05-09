@@ -82,6 +82,11 @@
 
     <!-- Destination CRUD -->
     <string name="create_destination">Create destination</string>
+    <string name="create_destination_kicker">Admin</string>
+    <string name="create_destination_title">Create a</string>
+    <string name="create_destination_title_accent">destination.</string>
+    <string name="create_destination_subtitle">Add the minimum travel card data.</string>
+    <string name="create_destination_required_fields">Name, country and category are required.</string>
     <string name="destination_name">Name</string>
     <string name="destination_description">Description</string>
     <string name="destination_country">Country</string>

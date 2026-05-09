@@ -31,11 +31,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 import org.example.travelingapp.ui.views.components.TravelDialog
 import org.example.travelingapp.ui.views.components.TravelDropdown
 import org.example.travelingapp.ui.views.components.TravelIconButton
@@ -152,6 +154,48 @@ fun DestinationDetailView(
             dismissTextRes = R.string.cancel,
             onDismiss = { showDeleteDialog = false }
         )
+    }
+}
+
+@Preview(showBackground = true, name = "Destination detail - read")
+@Composable
+private fun DestinationReadContentPreview() {
+    TravelingAppTheme {
+        Column(modifier = Modifier.padding(Dimens.screenPadding)) {
+            DestinationReadContent(
+                name = "Atlas en otoño",
+                country = "Morocco",
+                category = "mountain",
+                description = "Montañas, riads y rutas lentas para viajar sin prisa.",
+                imageUrl = "local:destination_alps",
+                isAdmin = true,
+                onEdit = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Destination detail - edit")
+@Composable
+private fun DestinationEditContentPreview() {
+    TravelingAppTheme {
+        Column(modifier = Modifier.padding(Dimens.screenPadding)) {
+            DestinationEditContent(
+                name = "Cancun coast",
+                country = "Mexico",
+                category = "beach",
+                description = "A bright coastline for slow days.",
+                imageUrl = "local:destination_cancun",
+                categories = listOf("beach", "mountain", "city", "nature"),
+                onNameChanged = {},
+                onCountryChanged = {},
+                onCategoryChanged = {},
+                onDescriptionChanged = {},
+                onImageUrlChanged = {},
+                onCancel = {},
+                onSave = {}
+            )
+        }
     }
 }
 

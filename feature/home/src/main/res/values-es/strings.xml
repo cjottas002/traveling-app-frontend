@@ -65,6 +65,11 @@
     <string name="coming_soon">Próximamente</string>
     <string name="coming_soon_description">Esta sección está en desarrollo</string>
     <string name="create_destination">Crear destino</string>
+    <string name="create_destination_kicker">Admin</string>
+    <string name="create_destination_title">Crea un</string>
+    <string name="create_destination_title_accent">destino.</string>
+    <string name="create_destination_subtitle">Añade los datos mínimos de la tarjeta de viaje.</string>
+    <string name="create_destination_required_fields">Nombre, país y categoría son obligatorios.</string>
     <string name="destination_name">Nombre</string>
     <string name="destination_description">Descripción</string>
     <string name="destination_country">País</string>

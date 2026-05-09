@@ -36,8 +36,11 @@ class CreateDestinationViewModel @Inject constructor(
     private val _category = MutableStateFlow("")
     val category: StateFlow<String> = _category.asStateFlow()
 
-    val isEnabled: StateFlow<Boolean> = combine(_name, _country, _category) { name, country, category ->
-        name.isNotBlank() && country.isNotBlank() && category.isNotBlank()
+    private val _isSaving = MutableStateFlow(false)
+    val isSaving: StateFlow<Boolean> = _isSaving.asStateFlow()
+
+    val isEnabled: StateFlow<Boolean> = combine(_name, _country, _category, _isSaving) { name, country, category, isSaving ->
+        name.isNotBlank() && country.isNotBlank() && category.isNotBlank() && !isSaving
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     fun onNameChanged(value: String) { _name.value = value }
@@ -47,6 +50,8 @@ class CreateDestinationViewModel @Inject constructor(
     fun onCategoryChanged(value: String) { _category.value = value }
 
     fun create(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        if (_isSaving.value) return
+
         viewModelScope.launch {
             val token = tokenManager.fetchToken()
             if (token == null || token == "offline-session") {
@@ -54,6 +59,7 @@ class CreateDestinationViewModel @Inject constructor(
                 return@launch
             }
 
+            _isSaving.value = true
             runCatching {
                 val request = CreateDestinationRequest(
                     name = _name.value,
@@ -70,6 +76,8 @@ class CreateDestinationViewModel @Inject constructor(
                 }
             }.onFailure {
                 onError(it.message ?: "Error creating destination")
+            }.also {
+                _isSaving.value = false
             }
         }
     }

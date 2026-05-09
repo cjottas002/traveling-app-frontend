@@ -2,15 +2,8 @@ package org.example.travelingapp.ui.views.home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +29,7 @@ import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelMonoFamily
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
+import org.example.travelingapp.ui.views.components.TravelHairlineRow
 import org.example.travelingapp.ui.views.components.TravelVerticalSpacer
 import org.example.travelingapp.ui.views.home.viewmodels.TransportViewModel
 
@@ -83,39 +77,36 @@ private fun TransportTabContent(
 /** Dense editorial transport row: 44dp bone icon · title · meta mono · ember mono price right. */
 @Composable
 private fun TransportRow(transport: Transport, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(vertical = Dimens.spacingMd),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .clip(RoundedCornerShape(Dimens.radiusXs))
-                .background(MaterialTheme.colorScheme.surface),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.foundation.Image(
-                painter = painterResource(id = transport.imageRes),
-                contentDescription = null,
-                modifier = Modifier.size(28.dp),
-                contentScale = ContentScale.Fit
-            )
-        }
-        Spacer(Modifier.size(Dimens.spacingMd))
-        Column(modifier = Modifier.weight(1f)) {
+    TravelHairlineRow(
+        onClick = onClick,
+        leading = {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(Dimens.radiusXs))
+                    .background(MaterialTheme.colorScheme.surface),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.foundation.Image(
+                    painter = painterResource(id = transport.imageRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        },
+        trailing = {
             Text(
-                text = transport.name,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onBackground
+                text = transport.price,
+                style = MaterialTheme.typography.titleMedium.copy(fontFamily = TravelMonoFamily),
+                color = MaterialTheme.colorScheme.secondary
             )
         }
+    ) {
         Text(
-            text = transport.price,
-            style = MaterialTheme.typography.titleMedium.copy(fontFamily = TravelMonoFamily),
-            color = MaterialTheme.colorScheme.secondary
+            text = transport.name,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

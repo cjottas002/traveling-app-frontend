@@ -6,15 +6,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.example.travelingapp.data.remote.services.IUserService
+import org.example.travelingapp.BuildConfig
 import org.example.travelingapp.core.network.AndroidNetworkChecker
 import org.example.travelingapp.core.network.NetworkExecutor
 import org.example.travelingapp.core.network.interfaces.INetworkChecker
 import org.example.travelingapp.data.local.daos.DestinationDao
+import org.example.travelingapp.data.local.daos.PendingOperationDao
 import org.example.travelingapp.data.remote.services.IAccountService
 import org.example.travelingapp.data.remote.services.IDestinationService
 import org.example.travelingapp.data.remote.services.IHotelService
-import org.example.travelingapp.data.local.daos.PendingOperationDao
+import org.example.travelingapp.data.remote.services.IUserService
 import org.example.travelingapp.data.repository.DestinationRepository
 import org.example.travelingapp.data.sync.SyncManager
 import org.example.travelingapp.domain.repository.IDestinationRepository
@@ -29,9 +30,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    private const val BASE_URL_BACKEND = "http://192.168.1.66:5090/"
-    private const val BASE_URL_MOCK = "https://01394d44-8918-4a1d-8059-629c50c25e87.mock.pstmn.io/"
-
     @Provides
     @Singleton
     @Named("BackendRetrofit")
@@ -43,7 +41,7 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL_BACKEND)
+            .baseUrl(BuildConfig.BACKEND_BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -54,7 +52,7 @@ object AppModule {
     @Named("MockRetrofit")
     fun provideMockRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL_MOCK)
+            .baseUrl(BuildConfig.MOCK_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

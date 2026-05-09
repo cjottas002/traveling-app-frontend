@@ -2,14 +2,9 @@ package org.example.travelingapp.ui.views.home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,6 +38,7 @@ import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelMonoFamily
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
+import org.example.travelingapp.ui.views.components.TravelHairlineRow
 import org.example.travelingapp.ui.views.components.TravelLoader
 import org.example.travelingapp.ui.views.components.TravelVerticalSpacer
 import org.example.travelingapp.ui.views.home.viewmodels.HotelViewModel
@@ -91,63 +87,58 @@ private fun HotelTabContent(
 /** Editorial hotel row: 96dp thumb · title · location mono · price mono right-aligned. */
 @Composable
 private fun HotelRow(hotel: Hotel, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(vertical = Dimens.spacingMd),
-        verticalAlignment = Alignment.Top
-    ) {
-        val context = LocalContext.current
-        SubcomposeAsyncImage(
-            model = ImageRequest.Builder(context)
-                .data(hotel.optimizedThumbUrls.srpDesktop)
-                .crossfade(300)
-                .build(),
-            contentDescription = hotel.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(96.dp)
-                .clip(RoundedCornerShape(Dimens.radiusXs))
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-            loading = {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    TravelLoader()
+    val context = LocalContext.current
+    TravelHairlineRow(
+        onClick = onClick,
+        leading = {
+            SubcomposeAsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(hotel.optimizedThumbUrls.srpDesktop)
+                    .crossfade(300)
+                    .build(),
+                contentDescription = hotel.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(RoundedCornerShape(Dimens.radiusXs))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                loading = {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        TravelLoader()
+                    }
                 }
+            )
+        },
+        trailing = {
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = "€ ${hotel.ratePlan.price.current}",
+                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = TravelMonoFamily),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = stringResource(R.string.hotels_per_night).uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+        }
+    ) {
+        Text(
+            text = hotel.address.streetAddress,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
-        Spacer(Modifier.size(Dimens.spacingMd))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = hotel.address.streetAddress,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(Modifier.height(Dimens.spacingXxs))
-            Text(
-                text = hotel.address.locality.uppercase(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(Dimens.spacingXs))
-            Text(
-                text = "★ ${hotel.guestReviews.rating}",
-                style = MaterialTheme.typography.labelSmall.copy(fontFamily = TravelMonoFamily),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = "€ ${hotel.ratePlan.price.current}",
-                style = MaterialTheme.typography.titleMedium.copy(fontFamily = TravelMonoFamily),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = stringResource(R.string.hotels_per_night).uppercase(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = hotel.address.locality.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = "★ ${hotel.guestReviews.rating}",
+            style = MaterialTheme.typography.labelSmall.copy(fontFamily = TravelMonoFamily),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

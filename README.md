@@ -147,7 +147,23 @@ Estructura de tests siempre con patron **AAA** (Arrange / Act / Assert) en bloqu
 - JDK **11**.
 - Android SDK **36** instalado.
 - Dispositivo fisico o emulador con **API 29+** (Android 10).
-- API accesible. La URL por defecto esta configurada en `app/.../core/di/AppModule.kt` (`BASE_URL_BACKEND`). Cambiala segun tu entorno antes de compilar.
+- API accesible. Las URLs se separan por tipo de build:
+
+`debug` lee las URLs locales desde `local.properties`, que no se versiona:
+
+```properties
+traveling.debug.backend.baseUrl=http://192.168.1.66:5090/
+traveling.debug.mock.baseUrl=https://01394d44-8918-4a1d-8059-629c50c25e87.mock.pstmn.io/
+```
+
+`release` lee las URLs versionadas desde `gradle.properties`:
+
+```properties
+traveling.release.backend.baseUrl=http://192.168.1.66:5090/
+traveling.release.mock.baseUrl=https://01394d44-8918-4a1d-8059-629c50c25e87.mock.pstmn.io/
+```
+
+Si no defines `traveling.debug.backend.baseUrl`, Gradle usa `http://10.0.2.2:5090/`, que apunta al host desde un emulador Android.
 
 ## Compilar y ejecutar
 

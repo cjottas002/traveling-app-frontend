@@ -6,6 +6,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+/**
+ * Meridian checkbox used in auth and settings flows.
+ *
+ * Checked state uses ember, not primary ink: checkbox acceptance is a local
+ * action/accent, not app chrome.
+ */
 @Composable
 fun TravelCheckbox(
     checked: Boolean,
@@ -19,7 +25,9 @@ fun TravelCheckbox(
         modifier = modifier,
         enabled = enabled,
         colors = CheckboxDefaults.colors(
-            checkedColor = MaterialTheme.colorScheme.primary
+            checkedColor = MaterialTheme.colorScheme.secondary,
+            checkmarkColor = MaterialTheme.colorScheme.onSecondary,
+            uncheckedColor = MaterialTheme.colorScheme.outline
         )
     )
 }

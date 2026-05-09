@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.math.BigDecimal
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,6 +12,22 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     jacoco
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use(::load)
+    }
+}
+
+fun localProperty(name: String, defaultValue: String): String =
+    localProperties.getProperty(name) ?: defaultValue
+
+fun gradleProperty(name: String, defaultValue: String): String =
+    providers.gradleProperty(name).orElse(defaultValue).get()
+
+fun String.asBuildConfigString(): String =
+    "\"${replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 android {
     namespace = "org.example.travelingapp"
@@ -30,8 +47,34 @@ android {
         debug {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
+            buildConfigField(
+                "String",
+                "BACKEND_BASE_URL",
+                localProperty("traveling.debug.backend.baseUrl", "http://10.0.2.2:5090/").asBuildConfigString()
+            )
+            buildConfigField(
+                "String",
+                "MOCK_BASE_URL",
+                localProperty(
+                    "traveling.debug.mock.baseUrl",
+                    "https://01394d44-8918-4a1d-8059-629c50c25e87.mock.pstmn.io/"
+                ).asBuildConfigString()
+            )
         }
         release {
+            buildConfigField(
+                "String",
+                "BACKEND_BASE_URL",
+                gradleProperty("traveling.release.backend.baseUrl", "http://10.0.2.2:5090/").asBuildConfigString()
+            )
+            buildConfigField(
+                "String",
+                "MOCK_BASE_URL",
+                gradleProperty(
+                    "traveling.release.mock.baseUrl",
+                    "https://01394d44-8918-4a1d-8059-629c50c25e87.mock.pstmn.io/"
+                ).asBuildConfigString()
+            )
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

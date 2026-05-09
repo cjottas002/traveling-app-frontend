@@ -14,6 +14,7 @@
     <string name="home_kicker">This week</string>
     <string name="home_title">Picked</string>
     <string name="home_title_accent">for you.</string>
+    <string name="home_selected_count">%1$d selected destinations</string>
     <string name="home_section_nearby">Near you</string>
     <string name="home_view_all">View all →</string>
     <string name="no_destinations">No destinations yet.</string>
@@ -28,6 +29,12 @@
     <string name="hotels_kicker">Stay</string>
     <string name="hotels_title">Where you</string>
     <string name="hotels_title_accent">rest.</string>
+    <string name="hotels_results_count">%1$d available stays</string>
+    <string name="hotels_filter_all">All</string>
+    <string name="hotels_filter_marrakech">Marrakech</string>
+    <string name="hotels_filter_desert">Desert</string>
+    <string name="hotels_empty">No stays match this filter.</string>
+    <string name="hotels_error_title">Hotels could not be loaded</string>
     <string name="hotels_per_night">/ night</string>
 
     <!-- Transport tab -->

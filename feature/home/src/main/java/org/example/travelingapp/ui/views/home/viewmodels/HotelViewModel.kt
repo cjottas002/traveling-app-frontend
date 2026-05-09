@@ -17,6 +17,9 @@ class HotelViewModel @Inject constructor(private val repo: IHotelRepository) : V
     private val _hotels = MutableStateFlow<List<Hotel>>(emptyList())
     val hotels: StateFlow<List<Hotel>> = _hotels.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
@@ -26,6 +29,7 @@ class HotelViewModel @Inject constructor(private val repo: IHotelRepository) : V
 
     fun loadHotels() {
         viewModelScope.launch {
+            _isLoading.value = true
             repo.fetchHotels().fold(
                 onSuccess = { list ->
                     _hotels.value = list
@@ -36,6 +40,7 @@ class HotelViewModel @Inject constructor(private val repo: IHotelRepository) : V
                     _error.value = ex.message
                 }
             )
+            _isLoading.value = false
         }
     }
 }

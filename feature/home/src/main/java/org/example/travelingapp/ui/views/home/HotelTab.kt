@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import org.example.travelingapp.domain.entities.hotelmodel.Address
@@ -37,19 +41,28 @@ import org.example.travelingapp.domain.entities.hotelmodel.RatePlan
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelMonoFamily
+import org.example.travelingapp.ui.views.components.TravelBannerTone
+import org.example.travelingapp.ui.views.components.TravelChipRow
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
+import org.example.travelingapp.ui.views.components.TravelFilterChip
 import org.example.travelingapp.ui.views.components.TravelHairlineRow
+import org.example.travelingapp.ui.views.components.TravelInlineBanner
 import org.example.travelingapp.ui.views.components.TravelLoader
+import org.example.travelingapp.ui.views.components.TravelText
 import org.example.travelingapp.ui.views.components.TravelVerticalSpacer
 import org.example.travelingapp.ui.views.home.viewmodels.HotelViewModel
 
 @Composable
 fun HotelTab(hotelViewModel: HotelViewModel = hiltViewModel()) {
     val hotels by hotelViewModel.hotels.collectAsState(emptyList())
+    val isLoading by hotelViewModel.isLoading.collectAsState()
+    val error by hotelViewModel.error.collectAsState()
     val context = LocalContext.current
 
     HotelTabContent(
         hotels = hotels,
+        isLoading = isLoading,
+        errorMessage = error,
         onHotelClick = { hotel ->
             Toast.makeText(context, hotel.address.locality, Toast.LENGTH_SHORT).show()
         }
@@ -59,8 +72,13 @@ fun HotelTab(hotelViewModel: HotelViewModel = hiltViewModel()) {
 @Composable
 private fun HotelTabContent(
     hotels: List<Hotel>,
+    isLoading: Boolean,
+    errorMessage: String?,
     onHotelClick: (Hotel) -> Unit
 ) {
+    var selectedFilter by rememberSaveable { mutableStateOf(HotelFilter.All) }
+    val filteredHotels = hotels.filter(selectedFilter::matches)
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -71,16 +89,73 @@ private fun HotelTabContent(
             TravelEditorialBlock(
                 kicker = stringResource(R.string.hotels_kicker),
                 title = stringResource(R.string.hotels_title),
-                accent = stringResource(R.string.hotels_title_accent)
+                accent = stringResource(R.string.hotels_title_accent),
+                sub = stringResource(R.string.hotels_results_count, filteredHotels.size)
             )
             TravelVerticalSpacer(Dimens.spacingLg)
+            HotelFilters(
+                selectedFilter = selectedFilter,
+                onFilterSelected = { selectedFilter = it }
+            )
+            TravelVerticalSpacer(Dimens.spacingMd)
         }
 
-        items(hotels, key = { it.id }) { hotel ->
+        if (!errorMessage.isNullOrBlank()) {
+            item {
+                TravelInlineBanner(
+                    title = stringResource(R.string.hotels_error_title),
+                    body = errorMessage,
+                    tone = TravelBannerTone.Error
+                )
+                TravelVerticalSpacer(Dimens.spacingMd)
+            }
+        }
+
+        if (isLoading && hotels.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.spacingXl),
+                    contentAlignment = Alignment.Center
+                ) {
+                    TravelLoader()
+                }
+            }
+        }
+
+        if (!isLoading && filteredHotels.isEmpty()) {
+            item {
+                TravelText(
+                    text = stringResource(R.string.hotels_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = Dimens.spacingLg)
+                )
+            }
+        }
+
+        items(filteredHotels, key = { it.id }) { hotel ->
             HotelRow(hotel) { onHotelClick(hotel) }
         }
 
         item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
+    }
+}
+
+@Composable
+private fun HotelFilters(
+    selectedFilter: HotelFilter,
+    onFilterSelected: (HotelFilter) -> Unit
+) {
+    TravelChipRow {
+        HotelFilter.entries.forEach { filter ->
+            TravelFilterChip(
+                textRes = filter.labelRes,
+                selected = selectedFilter == filter,
+                onClick = { onFilterSelected(filter) }
+            )
+        }
     }
 }
 
@@ -142,6 +217,29 @@ private fun HotelRow(hotel: Hotel, onClick: () -> Unit) {
     }
 }
 
+private enum class HotelFilter(val labelRes: Int) {
+    All(R.string.hotels_filter_all),
+    Marrakech(R.string.hotels_filter_marrakech),
+    Desert(R.string.hotels_filter_desert);
+
+    fun matches(hotel: Hotel): Boolean = when (this) {
+        All -> true
+        Marrakech -> hotel.searchText().contains("marrakech")
+        Desert -> {
+            val searchText = hotel.searchText()
+            searchText.contains("desert") || searchText.contains("merzouga")
+        }
+    }
+}
+
+private fun Hotel.searchText(): String = listOf(
+    name,
+    address.streetAddress,
+    address.locality,
+    address.countryName,
+    neighbourhood
+).joinToString(" ").lowercase()
+
 @Preview(showBackground = true, name = "Hotels")
 @Composable
 private fun HotelTabContentPreview() {
@@ -165,6 +263,8 @@ private fun HotelTabContentPreview() {
                     rating = "4.9"
                 )
             ),
+            isLoading = false,
+            errorMessage = null,
             onHotelClick = {}
         )
     }

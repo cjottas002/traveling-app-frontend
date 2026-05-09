@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,8 +19,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,6 +46,7 @@ import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelGradients
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
 import org.example.travelingapp.ui.views.components.TravelFab
+import org.example.travelingapp.ui.views.components.TravelHairlineRow
 import org.example.travelingapp.ui.views.components.TravelLoader
 import org.example.travelingapp.ui.views.components.TravelScaffold
 import org.example.travelingapp.ui.views.components.TravelText
@@ -68,17 +70,20 @@ fun HomeTab(
         isLoading = isLoading,
         username = username,
         isAdmin = isAdmin,
+        onRefresh = viewModel::refresh,
         onCreateDestination = onCreateDestination,
         onDestinationClick = onDestinationClick
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTabContent(
     destinations: List<Destination>,
     isLoading: Boolean,
     username: String?,
     isAdmin: Boolean,
+    onRefresh: () -> Unit,
     onCreateDestination: () -> Unit,
     onDestinationClick: (String) -> Unit
 ) {
@@ -93,69 +98,77 @@ private fun HomeTabContent(
             }
         }
     ) { innerPadding ->
-        LazyColumn(
+        PullToRefreshBox(
+            isRefreshing = isLoading,
+            onRefresh = onRefresh,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = Dimens.screenPadding)
         ) {
-            item {
-                GreetingHeader(username = username)
-                TravelVerticalSpacer(Dimens.spacingXl)
-                TravelEditorialBlock(
-                    kicker = stringResource(R.string.home_kicker),
-                    title = stringResource(R.string.home_title),
-                    accent = stringResource(R.string.home_title_accent)
-                )
-                TravelVerticalSpacer(Dimens.spacingLg)
-            }
-
-            val featured = destinations.firstOrNull()
-            if (featured != null) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = Dimens.screenPadding)
+            ) {
                 item {
-                    FeaturedDestinationCard(
-                        destination = featured,
-                        onClick = { onDestinationClick(featured.id) }
+                    GreetingHeader(username = username)
+                    TravelVerticalSpacer(Dimens.spacingXl)
+                    TravelEditorialBlock(
+                        kicker = stringResource(R.string.home_kicker),
+                        title = stringResource(R.string.home_title),
+                        accent = stringResource(R.string.home_title_accent),
+                        sub = stringResource(R.string.home_selected_count, destinations.size)
                     )
-                    TravelVerticalSpacer(Dimens.sectionSpacing)
+                    TravelVerticalSpacer(Dimens.spacingLg)
                 }
-            }
 
-            if (destinations.size > 1) {
-                item {
-                    SectionHeader(label = stringResource(R.string.home_section_nearby))
-                    TravelVerticalSpacer(Dimens.spacingMd)
+                val featured = destinations.firstOrNull()
+                if (featured != null) {
+                    item {
+                        FeaturedDestinationCard(
+                            destination = featured,
+                            onClick = { onDestinationClick(featured.id) }
+                        )
+                        TravelVerticalSpacer(Dimens.sectionSpacing)
+                    }
                 }
-            }
 
-            if (isLoading && destinations.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(Dimens.spacingXl),
-                        contentAlignment = Alignment.Center
-                    ) { TravelLoader() }
+                if (destinations.size > 1) {
+                    item {
+                        SectionHeader(label = stringResource(R.string.home_section_nearby))
+                        TravelVerticalSpacer(Dimens.spacingMd)
+                    }
                 }
-            }
 
-            if (destinations.isEmpty() && !isLoading) {
-                item {
-                    TravelText(
-                        text = stringResource(R.string.no_destinations),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(vertical = Dimens.spacingLg)
+                if (isLoading && destinations.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(Dimens.spacingXl),
+                            contentAlignment = Alignment.Center
+                        ) { TravelLoader() }
+                    }
+                }
+
+                if (destinations.isEmpty() && !isLoading) {
+                    item {
+                        TravelText(
+                            text = stringResource(R.string.no_destinations),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(vertical = Dimens.spacingLg)
+                        )
+                    }
+                }
+
+                items(destinations.drop(1), key = { it.id }) { destination ->
+                    DestinationRow(
+                        destination = destination,
+                        onClick = { onDestinationClick(destination.id) }
                     )
                 }
-            }
 
-            items(destinations.drop(1), key = { it.id }) { destination ->
-                DestinationRow(
-                    destination = destination,
-                    onClick = { onDestinationClick(destination.id) }
-                )
+                item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
             }
-
-            item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
         }
     }
 }
@@ -295,39 +308,41 @@ private fun FeaturedDestinationCard(destination: Destination, onClick: () -> Uni
 /** Compact row for non-featured destinations. */
 @Composable
 private fun DestinationRow(destination: Destination, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = Dimens.spacingMd),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(Dimens.avatarMd)
-                .clip(RoundedCornerShape(Dimens.radiusXs))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-        ) {
-            DestinationImage(
-                imageUrl = destination.imageUrl,
-                contentDescription = destination.name,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-        Spacer(Modifier.size(Dimens.spacingMd))
-        Column(modifier = Modifier.fillMaxHeight()) {
+    TravelHairlineRow(
+        onClick = onClick,
+        leading = {
+            Box(
+                modifier = Modifier
+                    .size(Dimens.avatarMd)
+                    .clip(RoundedCornerShape(Dimens.radiusXs))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                DestinationImage(
+                    imageUrl = destination.imageUrl,
+                    contentDescription = destination.name,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        },
+        trailing = {
             Text(
-                text = destination.name,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(Modifier.height(Dimens.spacingXxs))
-            Text(
-                text = "${destination.country} · ${destination.category}".uppercase(),
+                text = destination.category.takeIf { it.isNotBlank() }?.uppercase().orEmpty(),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.secondary
             )
         }
+    ) {
+        Text(
+            text = destination.name,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(Modifier.height(Dimens.spacingXxs))
+        Text(
+            text = destination.country.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -393,6 +408,7 @@ private fun HomeTabContentPreview() {
             isLoading = false,
             username = "isabel.morais",
             isAdmin = true,
+            onRefresh = {},
             onCreateDestination = {},
             onDestinationClick = {}
         )

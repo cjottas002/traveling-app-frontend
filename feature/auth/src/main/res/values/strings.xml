@@ -18,6 +18,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="email">Email</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
 
     <!-- Register · editorial -->
@@ -34,6 +35,17 @@
     <string name="register_error_empty_fields">Please fill in all fields</string>
     <string name="register_error_passwords_dont_match">Passwords don\'t match</string>
     <string name="accept_terms">I accept the terms of service and privacy policy.</string>
+
+    <!-- Forgot password · editorial -->
+    <string name="forgot_password_kicker">Forgot password</string>
+    <string name="forgot_password_title">We will send</string>
+    <string name="forgot_password_title_accent">a link.</string>
+    <string name="forgot_password_subtitle">It should arrive in less than a minute. Check spam too.</string>
+    <string name="forgot_password_step_meta">Access · Recovery</string>
+    <string name="forgot_password_send_action">Send link</string>
+    <string name="forgot_password_resend_action">Resend link</string>
+    <string name="forgot_password_sent_title">Link sent</string>
+    <string name="forgot_password_sent_body">Check your inbox and use the recovery link to choose a new password.</string>
 
     <!-- Misc -->
     <string name="itd_available_soon">This feature will be implemented soon</string>

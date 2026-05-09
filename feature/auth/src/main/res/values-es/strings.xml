@@ -18,6 +18,7 @@
     <string name="username">Nombre de usuario</string>
     <string name="password">Contraseña</string>
     <string name="confirm_password">Confirmar contraseña</string>
+    <string name="email">Correo</string>
     <string name="passwords_dont_match">Las contraseñas no coinciden</string>
 
     <!-- Register · editorial -->
@@ -34,6 +35,17 @@
     <string name="register_error_empty_fields">Completa todos los campos</string>
     <string name="register_error_passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="accept_terms">Acepto los términos del servicio y la política de privacidad.</string>
+
+    <!-- Forgot password · editorial -->
+    <string name="forgot_password_kicker">Olvidaste tu contraseña</string>
+    <string name="forgot_password_title">Te enviamos</string>
+    <string name="forgot_password_title_accent">un enlace.</string>
+    <string name="forgot_password_subtitle">Llegará en menos de un minuto. Revisa también spam.</string>
+    <string name="forgot_password_step_meta">Acceso · Recuperar</string>
+    <string name="forgot_password_send_action">Enviar enlace</string>
+    <string name="forgot_password_resend_action">Reenviar enlace</string>
+    <string name="forgot_password_sent_title">Enlace enviado</string>
+    <string name="forgot_password_sent_body">Revisa tu correo y usa el enlace de recuperación para elegir una nueva contraseña.</string>
 
     <!-- Misc -->
     <string name="itd_available_soon">Esta funcionalidad estará disponible pronto</string>

@@ -12,6 +12,7 @@ import androidx.navigation.toRoute
 import org.example.travelingapp.core.datastore.StoreBoarding
 import org.example.travelingapp.core.datastore.TokenManager
 import org.example.travelingapp.ui.SplashScreen
+import org.example.travelingapp.ui.views.auth.ForgotPasswordView
 import org.example.travelingapp.ui.views.auth.LoginView
 import org.example.travelingapp.ui.views.auth.RegisterView
 import org.example.travelingapp.ui.views.home.HomeView
@@ -54,13 +55,19 @@ fun NavManager(modifier: Modifier) {
         composable<Route.Login> {
             LoginView(
                 onNavigateToHome = { navController.navigate(Route.Home) },
-                onNavigateToRegister = { navController.navigate(Route.Register) }
+                onNavigateToRegister = { navController.navigate(Route.Register) },
+                onNavigateToForgotPassword = { navController.navigate(Route.ForgotPassword) }
             )
         }
         composable<Route.Register> {
             RegisterView(
                 navController = navController,
                 onNavigateToLogin = { navController.navigate(Route.Login) }
+            )
+        }
+        composable<Route.ForgotPassword> {
+            ForgotPasswordView(
+                onBackClicked = { navController.popBackStack() }
             )
         }
         composable<Route.Home> {

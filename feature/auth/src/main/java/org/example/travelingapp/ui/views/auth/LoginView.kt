@@ -44,13 +44,13 @@ import org.example.travelingapp.ui.views.components.TravelVerticalSpacer
 fun LoginView(
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit,
+    onNavigateToForgotPassword: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val username by authViewModel.username.collectAsState()
     val password by authViewModel.password.collectAsState()
     val isLoginEnabled by authViewModel.isLoginEnabled.collectAsState()
     val context = LocalContext.current
-    val availableSoonText = stringResource(R.string.itd_available_soon)
 
     LoginContent(
         username = username,
@@ -64,9 +64,7 @@ fun LoginView(
                 onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() }
             )
         },
-        onForgotPasswordClicked = {
-            Toast.makeText(context, availableSoonText, Toast.LENGTH_SHORT).show()
-        },
+        onForgotPasswordClicked = onNavigateToForgotPassword,
         onCreateAccountClicked = onNavigateToRegister
     )
 }

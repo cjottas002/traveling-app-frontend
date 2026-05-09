@@ -72,7 +72,6 @@ fun NavManager(modifier: Modifier) {
         }
         composable<Route.Home> {
             HomeView(
-                navController = navController,
                 onNavigateToRentCar = { navController.navigate(Route.RentCar) },
                 onNavigateToCreateDestination = { navController.navigate(Route.CreateDestination) },
                 onNavigateToDestinationDetail = { id -> navController.navigate(Route.DestinationDetail(id)) },

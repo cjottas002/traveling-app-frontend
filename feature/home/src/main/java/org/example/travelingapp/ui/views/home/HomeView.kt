@@ -12,10 +12,9 @@ import androidx.compose.material.icons.filled.Hotel
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.TravelingAppTheme
@@ -26,7 +25,6 @@ import org.example.travelingapp.ui.views.components.TravelScaffold
 
 @Composable
 fun HomeView(
-    navController: NavController,
     onNavigateToRentCar: () -> Unit,
     onNavigateToCreateDestination: () -> Unit = {},
     onNavigateToDestinationDetail: (String) -> Unit = {},

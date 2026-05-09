@@ -103,8 +103,6 @@
     <string name="rentcar_category_family">Family</string>
     <string name="rentcar_category_utility">Utility</string>
     <string name="rentcar_category_sport">Sport</string>
-    <string name="coming_soon">Coming soon</string>
-    <string name="coming_soon_description">This section is under development</string>
 
     <!-- Destination CRUD -->
     <string name="create_destination">Create destination</string>

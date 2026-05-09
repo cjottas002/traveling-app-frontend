@@ -93,8 +93,6 @@
     <string name="profile_notifications_meta">Alertas del viaje</string>
     <string name="profile_payments_title">Métodos de pago</string>
     <string name="profile_payments_meta">Configuración pendiente</string>
-    <string name="coming_soon">Próximamente</string>
-    <string name="coming_soon_description">Esta sección está en desarrollo</string>
     <string name="create_destination">Crear destino</string>
     <string name="create_destination_kicker">Admin</string>
     <string name="create_destination_title">Crea un</string>

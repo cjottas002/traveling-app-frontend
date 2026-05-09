@@ -32,7 +32,7 @@ import org.example.travelingapp.ui.theme.TravelingAppTheme
 /**
  * Editorial empty-state. Italic Bricolage glyph (large), display headline with
  * optional italic ember accent, body sub, and an optional ember outlined badge.
- * Used for placeholder screens like RentCar and the Profile tab.
+ * Used when a real list or surface has no content yet.
  */
 @Composable
 fun TravelEmptyState(
@@ -119,16 +119,16 @@ private fun headlineWithAccent(
     }
 }
 
-@Preview(showBackground = true, name = "Empty state · coming soon")
+@Preview(showBackground = true, name = "Empty state")
 @Composable
 private fun TravelEmptyStatePreview() {
     TravelingAppTheme {
         TravelEmptyState(
             glyph = "Aa",
-            title = "Lo estamos",
-            accent = "preparando.",
-            body = "El módulo estará disponible esta primavera. Te avisaremos.",
-            badge = "Próximamente · Q3 2026"
+            title = "Nada por",
+            accent = "mostrar.",
+            body = "Cuando haya contenido disponible, aparecerá en esta zona.",
+            badge = "SIN RESULTADOS"
         )
     }
 }

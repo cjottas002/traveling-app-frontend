@@ -53,12 +53,27 @@
     <string name="transport_direct_route">Direct route</string>
     <string name="transport_price_label">From</string>
 
-    <!-- Profile placeholder + RentCar catalog -->
-    <string name="empty_glyph">Aa</string>
-    <string name="profile_empty_title">We\'re still</string>
-    <string name="profile_empty_accent">building this.</string>
-    <string name="profile_empty_body">The profile section will be available this spring. We\'ll let you know.</string>
-    <string name="empty_badge_soon">Coming soon</string>
+    <!-- Profile + RentCar catalog -->
+    <string name="profile_kicker">Profile</string>
+    <string name="profile_title">Your trip</string>
+    <string name="profile_title_accent">at hand.</string>
+    <string name="profile_subtitle">Account, reservations and travel preferences.</string>
+    <string name="profile_guest_name">Traveler</string>
+    <string name="profile_role_fallback">User</string>
+    <string name="profile_account_meta">Active session</string>
+    <string name="profile_account_section">Account</string>
+    <string name="profile_account_title">Personal data</string>
+    <string name="profile_guest_meta">Local account</string>
+    <string name="profile_status_title">Session status</string>
+    <string name="profile_status_meta">Synced locally</string>
+    <string name="profile_reservations_section">Reservations</string>
+    <string name="profile_reservations_empty_title">No reservations yet</string>
+    <string name="profile_reservations_empty_body">Confirmed bookings will appear here when the reservations flow is connected.</string>
+    <string name="profile_preferences_section">Preferences</string>
+    <string name="profile_notifications_title">Notifications</string>
+    <string name="profile_notifications_meta">Travel alerts</string>
+    <string name="profile_payments_title">Payment methods</string>
+    <string name="profile_payments_meta">Pending setup</string>
     <string name="rent_a_car">Car rental</string>
     <string name="rentcar_kicker">Drive</string>
     <string name="rentcar_title">Choose your</string>

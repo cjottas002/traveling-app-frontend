@@ -42,7 +42,7 @@ fun HomeView(
             )
             1 -> TransportTab()
             2 -> HotelTab()
-            3 -> ThreeTab()
+            3 -> ProfileTab()
         }
     }
 }

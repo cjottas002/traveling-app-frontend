@@ -26,11 +26,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import org.example.travelingapp.domain.entities.hotelmodel.Address
+import org.example.travelingapp.domain.entities.hotelmodel.Coordinate
+import org.example.travelingapp.domain.entities.hotelmodel.Features
+import org.example.travelingapp.domain.entities.hotelmodel.GuestReviews
 import org.example.travelingapp.domain.entities.hotelmodel.Hotel
+import org.example.travelingapp.domain.entities.hotelmodel.OptimizedThumbUrls
+import org.example.travelingapp.domain.entities.hotelmodel.Price
+import org.example.travelingapp.domain.entities.hotelmodel.RatePlan
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelMonoFamily
@@ -44,6 +52,19 @@ fun HotelTab(hotelViewModel: HotelViewModel = hiltViewModel()) {
     val hotels by hotelViewModel.hotels.collectAsState(emptyList())
     val context = LocalContext.current
 
+    HotelTabContent(
+        hotels = hotels,
+        onHotelClick = { hotel ->
+            Toast.makeText(context, hotel.address.locality, Toast.LENGTH_SHORT).show()
+        }
+    )
+}
+
+@Composable
+private fun HotelTabContent(
+    hotels: List<Hotel>,
+    onHotelClick: (Hotel) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -60,9 +81,7 @@ fun HotelTab(hotelViewModel: HotelViewModel = hiltViewModel()) {
         }
 
         items(hotels, key = { it.id }) { hotel ->
-            HotelRow(hotel) {
-                Toast.makeText(context, hotel.address.locality, Toast.LENGTH_SHORT).show()
-            }
+            HotelRow(hotel) { onHotelClick(hotel) }
         }
 
         item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
@@ -131,3 +150,72 @@ private fun HotelRow(hotel: Hotel, onClick: () -> Unit) {
         }
     }
 }
+
+@Preview(showBackground = true, name = "Hotels")
+@Composable
+private fun HotelTabContentPreview() {
+    org.example.travelingapp.ui.theme.TravelingAppTheme {
+        HotelTabContent(
+            hotels = listOf(
+                previewHotel(
+                    id = 1,
+                    name = "Riad Yasmine",
+                    street = "Riad Yasmine",
+                    locality = "Marrakech · Medina",
+                    price = "124",
+                    rating = "4.8"
+                ),
+                previewHotel(
+                    id = 2,
+                    name = "Hotel Sahara View",
+                    street = "Hotel Sahara View",
+                    locality = "Merzouga · Desert",
+                    price = "92",
+                    rating = "4.9"
+                )
+            ),
+            onHotelClick = {}
+        )
+    }
+}
+
+private fun previewHotel(
+    id: Int,
+    name: String,
+    street: String,
+    locality: String,
+    price: String,
+    rating: String
+) = Hotel(
+    id = id,
+    name = name,
+    starRating = 4,
+    address = Address(
+        streetAddress = street,
+        extendedAddress = null,
+        locality = locality,
+        postalCode = "00000",
+        region = "Preview",
+        countryName = "Morocco",
+        countryCode = "MA",
+        obfuscate = false
+    ),
+    guestReviews = GuestReviews(
+        unformattedRating = rating.toDouble(),
+        rating = rating,
+        total = 120,
+        scale = 5,
+        badge = null,
+        badgeText = null
+    ),
+    ratePlan = RatePlan(
+        price = Price(current = price, exactCurrent = price.toDouble(), old = null),
+        features = Features(paymentPreference = false, noCCRequired = false)
+    ),
+    neighbourhood = "Preview",
+    coordinate = Coordinate(lat = 0.0, lon = 0.0),
+    providerType = "preview",
+    supplierHotelId = id,
+    isAlternative = false,
+    optimizedThumbUrls = OptimizedThumbUrls(srpDesktop = "")
+)

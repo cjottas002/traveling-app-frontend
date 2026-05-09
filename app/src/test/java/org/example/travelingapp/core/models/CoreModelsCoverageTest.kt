@@ -170,7 +170,14 @@ class CoreModelsCoverageTest {
             nextPageNumber = 2,
             nextPageGroup = "B"
         )
-        val pageData = PageData(image = 3, title = "T", desc = "D")
+        val pageData = PageData(
+            image = 3,
+            tag = "Atlas",
+            step = "Discover",
+            title = "T",
+            titleAccent = "A",
+            desc = "D"
+        )
 
         assertTrue(remoteUser.toString().contains("John"))
         assertEquals("Mary", alternativeUser.nombre)
@@ -178,7 +185,10 @@ class CoreModelsCoverageTest {
         assertEquals(1, pagination.currentPage)
         assertEquals("A", pagination.pageGroup)
         assertEquals(3, pageData.image)
+        assertEquals("Atlas", pageData.tag)
+        assertEquals("Discover", pageData.step)
         assertEquals("T", pageData.title)
+        assertEquals("A", pageData.titleAccent)
         assertEquals("D", pageData.desc)
         val dto = ResponseDto()
         assertEquals(ResponseDto::class, dto::class)

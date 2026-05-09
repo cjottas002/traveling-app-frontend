@@ -17,6 +17,12 @@
     <string name="home_section_nearby">Near you</string>
     <string name="home_view_all">View all →</string>
     <string name="no_destinations">No destinations yet.</string>
+    <string name="beach_vacation">Beach vacation</string>
+    <string name="upcoming_meetups">Upcoming meetups</string>
+    <string name="eurodisney">Eurodisney</string>
+    <string name="usa_los_angeles">USA, Los Angeles - 2 weeks</string>
+    <string name="city_of_los_angeles">City of Los Angeles</string>
+    <string name="maldives_3_weeks">Maldives - 3 weeks</string>
 
     <!-- Hotel tab -->
     <string name="hotels_kicker">Stay</string>
@@ -39,6 +45,8 @@
     <string name="rentcar_empty_title">We\'re still</string>
     <string name="rentcar_empty_accent">building this.</string>
     <string name="rentcar_empty_body">The rental module will be available this spring. We\'ll let you know.</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="coming_soon_description">This section is under development</string>
 
     <!-- Destination CRUD -->
     <string name="create_destination">Create destination</string>

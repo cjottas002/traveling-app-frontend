@@ -20,6 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,11 +30,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.example.travelingapp.feature.auth.R
 import org.example.travelingapp.ui.testtags.AuthTestTags
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.TravelingAppTheme
 import org.example.travelingapp.ui.views.auth.viewmodel.AuthViewModel
 import org.example.travelingapp.ui.views.components.TravelCheckbox
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
@@ -51,6 +56,46 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
     val passwordsMatch by authViewModel.passwordsMatch.collectAsState()
     val context = LocalContext.current
 
+    RegisterContent(
+        username = username,
+        password = password,
+        confirmPassword = confirmPassword,
+        acceptedTerms = acceptedTerms,
+        passwordsMatch = passwordsMatch,
+        isRegisterEnabled = isRegisterEnabled,
+        onBackClicked = { navController.popBackStack() },
+        onUsernameChanged = authViewModel::onUsernameChanged,
+        onPasswordChanged = authViewModel::onPasswordChanged,
+        onConfirmPasswordChanged = authViewModel::onConfirmPasswordChanged,
+        onTermsChanged = authViewModel::onTermsChanged,
+        onRegisterClicked = {
+            authViewModel.register(
+                onSuccess = { onNavigateToLogin() },
+                onError = { error ->
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                }
+            )
+        },
+        onNavigateToLogin = onNavigateToLogin
+    )
+}
+
+@Composable
+fun RegisterContent(
+    username: String,
+    password: String,
+    confirmPassword: String,
+    acceptedTerms: Boolean,
+    passwordsMatch: Boolean,
+    isRegisterEnabled: Boolean,
+    onBackClicked: () -> Unit,
+    onUsernameChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onConfirmPasswordChanged: (String) -> Unit,
+    onTermsChanged: (Boolean) -> Unit,
+    onRegisterClicked: () -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +106,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
             .padding(horizontal = Dimens.screenPadding)
             .testTag(AuthTestTags.REGISTER_SCREEN)
     ) {
-        Header(onBackClicked = { navController.popBackStack() })
+        Header(onBackClicked = onBackClicked)
 
         Spacer(Modifier.padding(top = Dimens.spacingXl))
 
@@ -76,7 +121,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
 
         TravelTextField(
             value = username,
-            onValueChange = { authViewModel.onUsernameChanged(it) },
+            onValueChange = onUsernameChanged,
             labelRes = R.string.username,
             modifier = Modifier.testTag(AuthTestTags.REGISTER_NAME_FIELD)
         )
@@ -85,7 +130,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
 
         TravelTextField(
             value = password,
-            onValueChange = { authViewModel.onPasswordChanged(it) },
+            onValueChange = onPasswordChanged,
             labelRes = R.string.password,
             isPassword = true,
             keyboardType = KeyboardType.Password,
@@ -96,7 +141,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
 
         TravelTextField(
             value = confirmPassword,
-            onValueChange = { authViewModel.onConfirmPasswordChanged(it) },
+            onValueChange = onConfirmPasswordChanged,
             labelRes = R.string.confirm_password,
             isPassword = true,
             keyboardType = KeyboardType.Password,
@@ -116,7 +161,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
 
         TermsRow(
             checked = acceptedTerms,
-            onCheckedChange = { authViewModel.onTermsChanged(it) }
+            onCheckedChange = onTermsChanged
         )
 
         TravelVerticalSpacer(Dimens.spacingLg)
@@ -128,14 +173,7 @@ fun RegisterView(navController: NavController, onNavigateToLogin: () -> Unit) {
                 .testTag(AuthTestTags.REGISTER_SUBMIT_BUTTON),
             enabled = isRegisterEnabled,
             trailingArrow = true,
-            onClick = {
-                authViewModel.register(
-                    onSuccess = { onNavigateToLogin() },
-                    onError = { error ->
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+            onClick = onRegisterClicked
         )
 
         TravelVerticalSpacer(Dimens.spacingSm)
@@ -193,6 +231,35 @@ private fun TermsRow(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
             text = stringResource(R.string.accept_terms),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Register - filled")
+@Composable
+private fun RegisterContentPreview() {
+    TravelingAppTheme {
+        var username by remember { mutableStateOf("isabel.morais") }
+        var password by remember { mutableStateOf("Admin123!") }
+        var confirmPassword by remember { mutableStateOf("Admin123!") }
+        var acceptedTerms by remember { mutableStateOf(true) }
+        RegisterContent(
+            username = username,
+            password = password,
+            confirmPassword = confirmPassword,
+            acceptedTerms = acceptedTerms,
+            passwordsMatch = password == confirmPassword,
+            isRegisterEnabled = username.isNotBlank() &&
+                password.length >= 8 &&
+                password == confirmPassword &&
+                acceptedTerms,
+            onBackClicked = {},
+            onUsernameChanged = { username = it },
+            onPasswordChanged = { password = it },
+            onConfirmPasswordChanged = { confirmPassword = it },
+            onTermsChanged = { acceptedTerms = it },
+            onRegisterClicked = {},
+            onNavigateToLogin = {}
         )
     }
 }

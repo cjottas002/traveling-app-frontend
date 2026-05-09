@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.example.travelingapp.domain.entities.Transport
@@ -43,6 +44,19 @@ fun TransportTab(transportViewModel: TransportViewModel = hiltViewModel()) {
     val transports by transportViewModel.transports.collectAsState(emptyList())
     val context = LocalContext.current
 
+    TransportTabContent(
+        transports = transports,
+        onTransportClick = { transport ->
+            Toast.makeText(context, transport.name, Toast.LENGTH_SHORT).show()
+        }
+    )
+}
+
+@Composable
+private fun TransportTabContent(
+    transports: List<Transport>,
+    onTransportClick: (Transport) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -59,9 +73,7 @@ fun TransportTab(transportViewModel: TransportViewModel = hiltViewModel()) {
         }
 
         items(transports) { transport ->
-            TransportRow(transport = transport) {
-                Toast.makeText(context, transport.name, Toast.LENGTH_SHORT).show()
-            }
+            TransportRow(transport = transport) { onTransportClick(transport) }
         }
 
         item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
@@ -104,6 +116,28 @@ private fun TransportRow(transport: Transport, onClick: () -> Unit) {
             text = transport.price,
             style = MaterialTheme.typography.titleMedium.copy(fontFamily = TravelMonoFamily),
             color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transport")
+@Composable
+private fun TransportTabContentPreview() {
+    org.example.travelingapp.ui.theme.TravelingAppTheme {
+        TransportTabContent(
+            transports = listOf(
+                Transport(
+                    name = "Madrid -> Marrakech",
+                    imageRes = R.drawable.common_ic_castle,
+                    price = "€ 184"
+                ),
+                Transport(
+                    name = "Barcelona -> Casablanca",
+                    imageRes = R.drawable.common_ic_castle,
+                    price = "€ 96"
+                )
+            ),
+            onTransportClick = {}
         )
     }
 }

@@ -34,7 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -43,8 +43,6 @@ import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Alpha
 import org.example.travelingapp.ui.theme.Dimens
 import org.example.travelingapp.ui.theme.TravelGradients
-import org.example.travelingapp.ui.theme.TravelMonoFamily
-import org.example.travelingapp.ui.views.components.TravelCard
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
 import org.example.travelingapp.ui.views.components.TravelFab
 import org.example.travelingapp.ui.views.components.TravelLoader
@@ -65,6 +63,25 @@ fun HomeTab(
     val isLoading by viewModel.isLoading.collectAsState()
     val username by viewModel.username.collectAsState()
 
+    HomeTabContent(
+        destinations = destinations,
+        isLoading = isLoading,
+        username = username,
+        isAdmin = isAdmin,
+        onCreateDestination = onCreateDestination,
+        onDestinationClick = onDestinationClick
+    )
+}
+
+@Composable
+private fun HomeTabContent(
+    destinations: List<Destination>,
+    isLoading: Boolean,
+    username: String?,
+    isAdmin: Boolean,
+    onCreateDestination: () -> Unit,
+    onDestinationClick: (String) -> Unit
+) {
     TravelScaffold(
         floatingActionButton = {
             if (isAdmin) {
@@ -340,6 +357,44 @@ private fun DestinationImage(
             contentDescription = contentDescription,
             modifier = modifier,
             contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Home - explore")
+@Composable
+private fun HomeTabContentPreview() {
+    org.example.travelingapp.ui.theme.TravelingAppTheme {
+        HomeTabContent(
+            destinations = listOf(
+                Destination(
+                    id = "atlas",
+                    name = "Atlas en otoño",
+                    description = "Montañas, riads y rutas lentas.",
+                    country = "Morocco",
+                    imageUrl = "local:destination_alps",
+                    category = "Mountain",
+                    createdBy = "preview",
+                    createdAt = 0L,
+                    updatedAt = 0L
+                ),
+                Destination(
+                    id = "cancun",
+                    name = "Cancun coast",
+                    description = "A bright coastline for slow days.",
+                    country = "Mexico",
+                    imageUrl = "local:destination_cancun",
+                    category = "Beach",
+                    createdBy = "preview",
+                    createdAt = 0L,
+                    updatedAt = 0L
+                )
+            ),
+            isLoading = false,
+            username = "isabel.morais",
+            isAdmin = true,
+            onCreateDestination = {},
+            onDestinationClick = {}
         )
     }
 }

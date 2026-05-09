@@ -66,6 +66,17 @@
     <string name="profile_guest_meta">Local account</string>
     <string name="profile_status_title">Session status</string>
     <string name="profile_status_meta">Synced locally</string>
+    <string name="profile_sync_section">Sync</string>
+    <string name="profile_sync_synced_label">Synced</string>
+    <string name="profile_sync_synced_title">Everything is up to date</string>
+    <string name="profile_sync_synced_body">There are no local changes waiting for the server.</string>
+    <string name="profile_sync_pending_label">Pending</string>
+    <string name="profile_sync_pending_title">Changes waiting to sync</string>
+    <string name="profile_sync_pending_body">Local changes will be sent in background.</string>
+    <string name="profile_sync_offline_label">Offline</string>
+    <string name="profile_sync_offline_title">No validated connection</string>
+    <string name="profile_sync_offline_body">Queued changes will wait until connection returns.</string>
+    <string name="profile_sync_queue_label">Queued</string>
     <string name="profile_reservations_section">Reservations</string>
     <string name="profile_reservations_empty_title">No reservations yet</string>
     <string name="profile_reservations_empty_body">Confirmed bookings will appear here when the reservations flow is connected.</string>

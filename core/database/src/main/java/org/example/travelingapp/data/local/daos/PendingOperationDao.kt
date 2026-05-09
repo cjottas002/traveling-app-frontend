@@ -3,6 +3,7 @@ package org.example.travelingapp.data.local.daos
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import org.example.travelingapp.data.local.entities.PendingOperationEntity
 
 @Dao
@@ -19,4 +20,7 @@ interface PendingOperationDao {
 
     @Query("SELECT COUNT(*) FROM pending_operations")
     suspend fun count(): Int
+
+    @Query("SELECT COUNT(*) FROM pending_operations")
+    fun observeCount(): Flow<Int>
 }

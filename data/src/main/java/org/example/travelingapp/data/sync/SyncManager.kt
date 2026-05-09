@@ -7,6 +7,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
 import org.example.travelingapp.data.local.daos.PendingOperationDao
 import org.example.travelingapp.data.local.entities.PendingOperationEntity
 import javax.inject.Inject
@@ -60,4 +61,6 @@ class SyncManager @Inject constructor(
     }
 
     suspend fun pendingCount(): Int = pendingOperationDao.count()
+
+    fun observePendingCount(): Flow<Int> = pendingOperationDao.observeCount()
 }

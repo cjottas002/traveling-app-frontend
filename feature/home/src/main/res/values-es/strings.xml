@@ -74,6 +74,17 @@
     <string name="profile_guest_meta">Cuenta local</string>
     <string name="profile_status_title">Estado de sesión</string>
     <string name="profile_status_meta">Sincronizada localmente</string>
+    <string name="profile_sync_section">Sincronización</string>
+    <string name="profile_sync_synced_label">Sincronizado</string>
+    <string name="profile_sync_synced_title">Todo está al día</string>
+    <string name="profile_sync_synced_body">No hay cambios locales esperando al servidor.</string>
+    <string name="profile_sync_pending_label">Pendiente</string>
+    <string name="profile_sync_pending_title">Cambios esperando sincronización</string>
+    <string name="profile_sync_pending_body">Los cambios locales se enviarán en segundo plano.</string>
+    <string name="profile_sync_offline_label">Sin conexión</string>
+    <string name="profile_sync_offline_title">Sin conexión validada</string>
+    <string name="profile_sync_offline_body">Los cambios en cola esperarán hasta recuperar conexión.</string>
+    <string name="profile_sync_queue_label">En cola</string>
     <string name="profile_reservations_section">Reservas</string>
     <string name="profile_reservations_empty_title">Aún no hay reservas</string>
     <string name="profile_reservations_empty_body">Las reservas confirmadas aparecerán aquí cuando conectemos el flujo de reservas.</string>

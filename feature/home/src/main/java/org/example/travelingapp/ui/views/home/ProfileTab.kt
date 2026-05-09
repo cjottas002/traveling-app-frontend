@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -39,6 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.example.travelingapp.feature.home.R
 import org.example.travelingapp.ui.theme.Alpha
 import org.example.travelingapp.ui.theme.Dimens
+import org.example.travelingapp.ui.theme.LocalTravelColors
 import org.example.travelingapp.ui.theme.TravelMonoFamily
 import org.example.travelingapp.ui.theme.TravelingAppTheme
 import org.example.travelingapp.ui.views.components.TravelEditorialBlock
@@ -50,20 +52,30 @@ import org.example.travelingapp.ui.views.home.viewmodels.ProfileViewModel
 fun ProfileTab(profileViewModel: ProfileViewModel = hiltViewModel()) {
     val username by profileViewModel.username.collectAsState()
     val role by profileViewModel.role.collectAsState()
+    val pendingOperations by profileViewModel.pendingOperations.collectAsState()
+    val isOnline by profileViewModel.isOnline.collectAsState()
 
     ProfileTabContent(
         username = username,
-        role = role
+        role = role,
+        pendingOperations = pendingOperations,
+        isOnline = isOnline
     )
 }
 
 @Composable
 private fun ProfileTabContent(
     username: String?,
-    role: String?
+    role: String?,
+    pendingOperations: Int,
+    isOnline: Boolean
 ) {
     val displayName = username.toDisplayName(stringResource(R.string.profile_guest_name))
     val roleLabel = role?.takeIf { it.isNotBlank() } ?: stringResource(R.string.profile_role_fallback)
+    val syncState = resolveSyncState(
+        pendingOperations = pendingOperations,
+        isOnline = isOnline
+    )
 
     LazyColumn(
         modifier = Modifier
@@ -103,6 +115,16 @@ private fun ProfileTabContent(
         }
 
         item {
+            ProfileSectionLabel(label = stringResource(R.string.profile_sync_section))
+            TravelVerticalSpacer(Dimens.spacingSm)
+            SyncStatusCard(
+                syncState = syncState,
+                pendingOperations = pendingOperations
+            )
+            TravelVerticalSpacer(Dimens.sectionSpacing)
+        }
+
+        item {
             ProfileSectionLabel(label = stringResource(R.string.profile_reservations_section))
             TravelVerticalSpacer(Dimens.spacingSm)
             ReservationsEmptyState()
@@ -125,6 +147,105 @@ private fun ProfileTabContent(
         }
 
         item { TravelVerticalSpacer(Dimens.screenBottomPadding) }
+    }
+}
+
+@Composable
+private fun SyncStatusCard(
+    syncState: ProfileSyncState,
+    pendingOperations: Int
+) {
+    val travelColors = LocalTravelColors.current
+    val accent = when (syncState) {
+        ProfileSyncState.Synced -> travelColors.synced
+        ProfileSyncState.Pending -> travelColors.pending
+        ProfileSyncState.Offline -> travelColors.offline
+    }
+    val titleRes = when (syncState) {
+        ProfileSyncState.Synced -> R.string.profile_sync_synced_title
+        ProfileSyncState.Pending -> R.string.profile_sync_pending_title
+        ProfileSyncState.Offline -> R.string.profile_sync_offline_title
+    }
+    val body = when (syncState) {
+        ProfileSyncState.Synced -> stringResource(R.string.profile_sync_synced_body)
+        ProfileSyncState.Pending -> stringResource(R.string.profile_sync_pending_body)
+        ProfileSyncState.Offline -> stringResource(R.string.profile_sync_offline_body)
+    }
+    val labelRes = when (syncState) {
+        ProfileSyncState.Synced -> R.string.profile_sync_synced_label
+        ProfileSyncState.Pending -> R.string.profile_sync_pending_label
+        ProfileSyncState.Offline -> R.string.profile_sync_offline_label
+    }
+    val iconTint = when (syncState) {
+        ProfileSyncState.Pending -> MaterialTheme.colorScheme.onTertiary
+        else -> MaterialTheme.colorScheme.onPrimary
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(Dimens.radiusXs),
+        color = accent.copy(alpha = 0.12f),
+        border = BorderStroke(
+            width = 1.dp,
+            color = accent.copy(alpha = Alpha.subtle)
+        )
+    ) {
+        Row(
+            modifier = Modifier.padding(Dimens.cardPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(Dimens.radiusXs))
+                    .background(accent),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = if (syncState == ProfileSyncState.Synced) {
+                        Icons.Filled.CheckCircle
+                    } else {
+                        Icons.Filled.Sync
+                    },
+                    contentDescription = null,
+                    tint = iconTint,
+                    modifier = Modifier.size(Dimens.iconMd)
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Dimens.spacingXxs)
+            ) {
+                Text(
+                    text = stringResource(labelRes).uppercase(),
+                    style = MaterialTheme.typography.labelSmall.copy(fontFamily = TravelMonoFamily),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(titleRes),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = body,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = pendingOperations.toString(),
+                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = TravelMonoFamily),
+                    color = accent
+                )
+                Text(
+                    text = stringResource(R.string.profile_sync_queue_label).uppercase(),
+                    style = MaterialTheme.typography.labelSmall.copy(fontFamily = TravelMonoFamily),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
 
@@ -298,13 +419,56 @@ private fun String?.toDisplayName(fallback: String): String {
         .replaceFirstChar { it.uppercase() }
 }
 
+private enum class ProfileSyncState {
+    Synced,
+    Pending,
+    Offline
+}
+
+private fun resolveSyncState(
+    pendingOperations: Int,
+    isOnline: Boolean
+): ProfileSyncState = when {
+    !isOnline -> ProfileSyncState.Offline
+    pendingOperations > 0 -> ProfileSyncState.Pending
+    else -> ProfileSyncState.Synced
+}
+
 @Preview(showBackground = true, name = "Profile")
 @Composable
 private fun ProfileTabContentPreview() {
     TravelingAppTheme {
         ProfileTabContent(
             username = "admin",
-            role = "Admin"
+            role = "Admin",
+            pendingOperations = 0,
+            isOnline = true
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile - pending sync")
+@Composable
+private fun ProfileTabPendingContentPreview() {
+    TravelingAppTheme {
+        ProfileTabContent(
+            username = "admin",
+            role = "Admin",
+            pendingOperations = 3,
+            isOnline = true
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile - offline sync")
+@Composable
+private fun ProfileTabOfflineContentPreview() {
+    TravelingAppTheme {
+        ProfileTabContent(
+            username = "admin",
+            role = "Admin",
+            pendingOperations = 2,
+            isOnline = false
         )
     }
 }

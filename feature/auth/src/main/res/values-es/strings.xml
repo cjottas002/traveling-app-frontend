@@ -47,6 +47,4 @@
     <string name="forgot_password_sent_title">Enlace enviado</string>
     <string name="forgot_password_sent_body">Revisa tu correo y usa el enlace de recuperación para elegir una nueva contraseña.</string>
 
-    <!-- Misc -->
-    <string name="itd_available_soon">Esta funcionalidad estará disponible pronto</string>
 </resources>

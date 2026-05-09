@@ -130,7 +130,7 @@ fun RegisterContent(
             labelRes = R.string.password,
             isPassword = true,
             keyboardType = KeyboardType.Password,
-            modifier = Modifier.testTag(AuthTestTags.REGISTER_LASTNAME_FIELD)
+            modifier = Modifier.testTag(AuthTestTags.REGISTER_PASSWORD_FIELD)
         )
 
         TravelVerticalSpacer(Dimens.spacingMd)
@@ -141,7 +141,7 @@ fun RegisterContent(
             labelRes = R.string.confirm_password,
             isPassword = true,
             keyboardType = KeyboardType.Password,
-            modifier = Modifier.testTag(AuthTestTags.REGISTER_AGE_FIELD)
+            modifier = Modifier.testTag(AuthTestTags.REGISTER_CONFIRM_PASSWORD_FIELD)
         )
 
         if (confirmPassword.isNotBlank() && !passwordsMatch) {

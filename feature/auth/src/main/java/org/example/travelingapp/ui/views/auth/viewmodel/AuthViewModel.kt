@@ -12,12 +12,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.example.travelingapp.feature.auth.R
 import org.example.travelingapp.core.datastore.TokenManager
-import org.example.travelingapp.core.network.NetworkExecutor
 import org.example.travelingapp.core.request.user.UserRequest
 import org.example.travelingapp.domain.repository.IAccountRepository
 import org.example.travelingapp.domain.repository.IUserRepository
+import org.example.travelingapp.feature.auth.R
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +24,6 @@ class AuthViewModel @Inject constructor(
     private val accountRepository: IAccountRepository,
     private val userRepository: IUserRepository,
     private val tokenManager: TokenManager,
-    private val networkExecutor: NetworkExecutor,
     @param:ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -34,7 +32,6 @@ class AuthViewModel @Inject constructor(
 
     private val _password = MutableStateFlow("Admin123!")
     val password: StateFlow<String> = _password.asStateFlow()
-
 
     private val _confirmPassword = MutableStateFlow("")
     val confirmPassword: StateFlow<String> = _confirmPassword.asStateFlow()

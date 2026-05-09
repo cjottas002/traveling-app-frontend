@@ -9,8 +9,8 @@ object AuthTestTags {
 
     const val REGISTER_SCREEN = "register_screen"
     const val REGISTER_NAME_FIELD = "register_name_field"
-    const val REGISTER_LASTNAME_FIELD = "register_lastname_field"
-    const val REGISTER_AGE_FIELD = "register_age_field"
+    const val REGISTER_PASSWORD_FIELD = "register_password_field"
+    const val REGISTER_CONFIRM_PASSWORD_FIELD = "register_confirm_password_field"
     const val REGISTER_SUBMIT_BUTTON = "register_submit_button"
 
     const val FORGOT_PASSWORD_SCREEN = "forgot_password_screen"

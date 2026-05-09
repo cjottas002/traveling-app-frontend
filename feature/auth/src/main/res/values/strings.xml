@@ -47,6 +47,4 @@
     <string name="forgot_password_sent_title">Link sent</string>
     <string name="forgot_password_sent_body">Check your inbox and use the recovery link to choose a new password.</string>
 
-    <!-- Misc -->
-    <string name="itd_available_soon">This feature will be implemented soon</string>
 </resources>

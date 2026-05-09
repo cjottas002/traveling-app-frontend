@@ -5,7 +5,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -13,7 +12,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.example.travelingapp.core.datastore.TokenManager
-import org.example.travelingapp.core.network.NetworkExecutor
 import org.example.travelingapp.core.response.login.LoginResponse
 import org.example.travelingapp.core.response.login.dtos.LoginDto
 import org.example.travelingapp.core.response.register.RegisterResponse
@@ -35,7 +33,6 @@ class AuthViewModelTest {
     private val accountRepository: IAccountRepository = mockk(relaxed = true)
     private val userRepository: IUserRepository = mockk(relaxed = true)
     private val tokenManager: TokenManager = mockk(relaxed = true)
-    private val networkExecutor: NetworkExecutor = mockk()
     private val context: Context = mockk(relaxed = true)
 
     @Before
@@ -47,7 +44,6 @@ class AuthViewModelTest {
             accountRepository = accountRepository,
             userRepository = userRepository,
             tokenManager = tokenManager,
-            networkExecutor = networkExecutor,
             context = context
         )
     }
@@ -58,9 +54,10 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `username and password have default values`() {
+    fun `username and password have development defaults`() {
         assertEquals("admin", viewModel.username.value)
         assertEquals("Admin123!", viewModel.password.value)
+        assertTrue(viewModel.isLoginEnabled.value)
     }
 
     @Test
@@ -168,19 +165,14 @@ class AuthViewModelTest {
 
     @Test
     fun `login online success saves token and calls onSuccess`() = runTest {
-        val onlineSlot = slot<() -> Unit>()
-        every {
-            networkExecutor.executeWithNetworkCheck(
-                onlineAction = capture(onlineSlot),
-                offlineAction = any()
-            )
-        } answers { onlineSlot.captured.invoke() }
-
         val response = LoginResponse().apply {
             data = LoginDto(userId = "1", token = "jwt-token-123")
         }
         coEvery { accountRepository.remoteLogin("admin", "Admin123!") } returns response
         coEvery { tokenManager.fetchToken() } returns "jwt-token-123"
+
+        viewModel.onUsernameChanged("admin")
+        viewModel.onPasswordChanged("Admin123!")
 
         var successToken = ""
         viewModel.login(
@@ -194,15 +186,10 @@ class AuthViewModelTest {
 
     @Test
     fun `login online failure calls onError`() = runTest {
-        val onlineSlot = slot<() -> Unit>()
-        every {
-            networkExecutor.executeWithNetworkCheck(
-                onlineAction = capture(onlineSlot),
-                offlineAction = any()
-            )
-        } answers { onlineSlot.captured.invoke() }
-
         coEvery { accountRepository.remoteLogin(any(), any()) } throws RuntimeException("Network error")
+
+        viewModel.onUsernameChanged("admin")
+        viewModel.onPasswordChanged("Admin123!")
 
         var errorMsg = ""
         viewModel.login(
